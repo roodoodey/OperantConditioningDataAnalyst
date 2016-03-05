@@ -18,6 +18,8 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
+    NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+    NSString *randomUserPath = [testBundle pathForResource:@"" ofType:@"json"];
 }
 
 - (void)tearDown {
