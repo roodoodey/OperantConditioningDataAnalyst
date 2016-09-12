@@ -9,12 +9,16 @@
 #import "UsersOverviewViewModel.h"
 #import <Parse/Parse.h>
 #import "RandomUser.h"
+#import "MAXRandomUser.h"
+#import "MAXOperantCondDataMan.h"
 #import "UserDefaults.h"
 #import "Constants.h"
 
 @interface UsersOverviewViewModel () {
-    NSMutableArray *userGroups;
-    NSArray *allUsers;
+    NSArray <NSArray <MAXRandomUser *> *> *_userGroups;
+    
+    MAXOperantCondDataMan *_dataMan;
+    
 }
 
 @end
@@ -23,38 +27,22 @@
 
 -(id)init {
     if (self = [super init]) {
-        allUsers = [NSArray array];
-        userGroups = [NSMutableArray arrayWithObjects:[NSMutableArray array], [NSMutableArray array], [NSMutableArray array], [NSMutableArray array], nil];
+        
+        
+        _dataMan = [[MAXOperantCondDataMan alloc] init];
+        
+        NSArray <MAXRandomUser *> *FIUsers = [_dataMan usersWithReinforcementSchedule: kFISchedule];
+        NSArray <MAXRandomUser *> *VIUsers = [_dataMan usersWithReinforcementSchedule: kVISchedule];
+        NSArray <MAXRandomUser *> *FRUsers = [_dataMan usersWithReinforcementSchedule: kFRSchedule];
+        NSArray <MAXRandomUser *> *VRUsers = [_dataMan usersWithReinforcementSchedule: kVRSchedule];
+        
+        _userGroups = [NSArray arrayWithObjects: FIUsers, VIUsers, FRUsers, VRUsers, nil];
+        
     }
     
     return self;
 }
 
--(void)downloadRandomUsersWithBlock:(void (^)(BOOL, NSError *))block {
-    [block copy];
-    
-    __weak typeof (self) wSelf = self;
-    
-    PFQuery *query = [PFQuery queryWithClassName:@"RandomUser"];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-           
-            if (!error) {
-                allUsers = users;
-                NSLog(@"all users: %d", (int)allUsers.count);
-                [wSelf contsructUserGroups:users];
-                block(YES, nil);
-            }
-            else {
-                block(NO, error);
-            }
-            
-        });
-        
-    }];
-    
-}
 
 #pragma mark - Getters
 
@@ -63,9 +51,12 @@
 }
 
 -(NSInteger)numberOfRowsInSection:(NSInteger)section {
-    if (userGroups.count > section) {
-        NSMutableArray *usersInSection = [userGroups objectAtIndex:section];
+    
+    if (_userGroups.count > section) {
+        
+        NSArray *usersInSection = [_userGroups objectAtIndex: section];
         return usersInSection.count;
+        
     }
     
     return 0;
@@ -76,15 +67,15 @@
     return [self userAtIndexPath:indexPath].objectId;
 }
 
--(RandomUser*)userAtIndexPath:(NSIndexPath*)indexPath {
-    RandomUser *randomUser = [[userGroups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+-(MAXRandomUser*)userAtIndexPath:(NSIndexPath*)indexPath {
+    MAXRandomUser *randomUser = [[_userGroups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     
     return randomUser;
 }
 
 -(BOOL)isUserExcludedAtIndexPath:(NSIndexPath*)indexPath {
     
-    RandomUser *randomUser = [[userGroups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    MAXRandomUser *randomUser = [[_userGroups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     
     NSArray *excludedUsers = [UserDefaults excludedUsers];
     
@@ -98,15 +89,16 @@
 -(void)excludeOrAddUserDataAtIndexPath:(NSIndexPath *)indexPath withCompletion:(void (^)(BOOL))block {
     [block copy];
     
-    RandomUser *randomUser = [[userGroups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    MAXRandomUser *randomUser = [[_userGroups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     
     if ([self isUserExcludedAtIndexPath:indexPath]) {
-        NSLog(@"user is excluded");
+
         [UserDefaults removeExcludedUserWithId:randomUser.objectId];
         
         block(NO);
     }
     else {
+        
         [UserDefaults exclueUserWithId:randomUser.objectId];
         
         block(YES);
@@ -114,32 +106,5 @@
     
 }
 
-#pragma mark - Data Contrusction
-
--(void)contsructUserGroups:(NSArray*)theUsers {
-    
-    NSLog(@"constructing user goups");
-    
-    NSMutableArray *FI = [NSMutableArray array], *VI = [NSMutableArray array], *FR = [NSMutableArray array], *VR = [NSMutableArray array];
-    
-    for (RandomUser *randomUser in theUsers) {
-        
-        if ([randomUser.reinforcementSchedule intValue] == kFISchedule) {
-            [FI addObject:randomUser];
-        }
-        else if([randomUser.reinforcementSchedule intValue] == kVISchedule) {
-            [VI addObject:randomUser];
-        }
-        else if([randomUser.reinforcementSchedule intValue] == kFRSchedule) {
-            [FR addObject:randomUser];
-        }
-        else if([randomUser.reinforcementSchedule intValue] == kVRSchedule) {
-            [VR addObject:randomUser];
-        }
-    }
-    
-    userGroups = [NSMutableArray arrayWithObjects:FI, VI, FR, VR, nil];
-    
-}
 
 @end

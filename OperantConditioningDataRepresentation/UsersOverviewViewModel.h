@@ -9,15 +9,14 @@
 #import <Foundation/Foundation.h>
 
 @class RandomUser;
+@class MAXRandomUser;
 
 @interface UsersOverviewViewModel : NSObject
-
--(void)downloadRandomUsersWithBlock:(void (^)(BOOL success, NSError *error))block;
 
 -(NSInteger)numberOfSections;
 -(NSInteger)numberOfRowsInSection:(NSInteger)section;
 -(NSString*)userIdAtIndexPath:(NSIndexPath*)indexPath;
--(RandomUser*)userAtIndexPath:(NSIndexPath*)indexPath;
+-(MAXRandomUser*)userAtIndexPath:(NSIndexPath*)indexPath;
 
 -(BOOL)isUserExcludedAtIndexPath:(NSIndexPath*)indexPath;
 

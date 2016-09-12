@@ -56,22 +56,7 @@
     [self.view addSubview:_tableView];
     
         
-    MBProgressHUD *progressIndic = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    progressIndic.mode = MBProgressHUDModeIndeterminate;
-    
-    [_viewModel downloadRandomUsersWithBlock:^(BOOL success, NSError *error) {
-        
-        if (!error) {
-            [progressIndic hide:true];
-            [_tableView reloadData];
-        }
-        else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
-            [alert show];
-        }
-        
-    }];
-    
+    [_tableView reloadData];
     
 }
 
@@ -157,20 +142,9 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    
+        
     [self performSegueWithIdentifier:@"userDetailSegue" sender:self];
     
-    /*
-    [_viewModel excludeOrAddUserDataAtIndexPath:indexPath withCompletion:^(BOOL excluded) {
-        if (excluded) {
-            cell.textLabel.textColor = [UIColor flatGrayColor];
-        }
-        else {
-            cell.textLabel.textColor = [UIColor flatBlackColor];
-        }
-    }];
-    */
 }
 
 
