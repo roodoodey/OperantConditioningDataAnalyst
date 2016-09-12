@@ -130,7 +130,7 @@
     return array;
 }
 
--(NSArray*)behaviorOnlyForUsers:(NSArray *)theUsers {
+-(NSArray <MAXBehavior *> *)behaviorOnlyForUsers:(NSArray *)theUsers {
     
     NSMutableArray *array = [NSMutableArray array];
     

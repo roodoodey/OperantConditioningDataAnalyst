@@ -59,6 +59,7 @@
         _numPages = _numItemsBlock();
         _pageControl.numberOfPages = _numPages;
 
+        [self p_removeOldPageViewsWithPages: _pageViews];
         [self p_reloadPageViewsWithNumPages:_numPages];
         [self p_injectViewsWithNumPages:_numPages];
         
@@ -71,6 +72,7 @@
         
         _numPages = [self.maxDelegate MAXScrollViewNumPages:self];
 
+        [self p_removeOldPageViewsWithPages: _pageViews];
         [self p_reloadPageViewsWithNumPages:_numPages];
         [self p_injectViewsWithNumPages:_numPages];
         
@@ -186,5 +188,16 @@
     [_scrollView setContentSize:CGSizeMake(CGRectGetWidth(self.frame) * theNumPages, CGRectGetHeight(self.frame))];
     
 }
+
+-(void)p_removeOldPageViewsWithPages:(NSArray <UIView *> *)theViews {
+    
+    for (UIView *view in theViews) {
+        
+        [view removeFromSuperview];
+        
+    }
+    
+}
+
 
 @end

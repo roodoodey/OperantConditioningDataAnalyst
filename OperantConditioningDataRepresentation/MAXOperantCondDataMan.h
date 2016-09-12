@@ -34,7 +34,7 @@
 -(NSArray <NSArray <MAXReinforcer *> *> *)reinforcerForUsersByUsers:(NSArray*)theUsers;
 
 
--(NSArray*)behaviorOnlyForUsers:(NSArray*)theUsers;
+-(NSArray <MAXBehavior *> *)behaviorOnlyForUsers:(NSArray*)theUsers;
 -(NSArray*)reinforcerOnlyForUsers:(NSArray*)theUsers;
 
 
