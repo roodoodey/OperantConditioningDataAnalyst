@@ -35,8 +35,8 @@ static MAXOperantCondDataMan *_dataMan;
 
 -(void)testDataMan {
     
-    XCTAssertTrue(_dataMan.allUsers.count == 4);
-    XCTAssertTrue(_dataMan.users.count == 4);
+    XCTAssertTrue(_dataMan.allUsers.count == 7);
+    XCTAssertTrue(_dataMan.users.count == 7);
     XCTAssertTrue(_dataMan.behavior.count == 113);
     XCTAssertTrue(_dataMan.correctBehavior.count == 110);
     
@@ -133,14 +133,29 @@ static MAXOperantCondDataMan *_dataMan;
     XCTAssertTrue(FRReinforcer.firstObject.count == 4);
     
     float avgReinforcer = [_dataMan avgReinforcerForUsers: FRUsers];
-    NSString *avgReinforcerStirng = [NSString stringWithFormat:@"%.4f", avgReinforcer];
-    XCTAssertTrue([avgReinforcerStirng isEqualToString:@"0.4000"] == YES);
+    NSString *avgReinforcerString = [NSString stringWithFormat:@"%.4f", avgReinforcer];
+    XCTAssertTrue([avgReinforcerString isEqualToString:@"0.4000"] == YES);
     
     [self validateUsersReinforcerArray: FRReinforcer users: FRUsers];
     
     float stdDevReinforcer = [_dataMan stdDevReinforcerForUsers: FRUsers];
     NSString *stdDevReinforcerString = [NSString stringWithFormat:@"%.4f", stdDevReinforcer];
     XCTAssertTrue([stdDevReinforcerString isEqualToString: @"0.6633"] == YES);
+    
+}
+
+// tests the avg time played calculation and std dev
+-(void)testVRSchedule {
+    
+    NSArray *vrUsers = [_dataMan usersWithReinforcementSchedule: kVRSchedule];
+    XCTAssertTrue(vrUsers.count == 3);
+    
+    float avgTimeForUsers = [_dataMan avgTimeForUsers: vrUsers];
+    XCTAssertTrue(avgTimeForUsers == 280);
+    
+    float stdDevTime = [_dataMan stdDevTimeForUsers: vrUsers];
+    NSString *stdDevTimeString = [NSString stringWithFormat:@"%.4f", stdDevTime];
+    XCTAssertTrue([stdDevTimeString isEqualToString:@"157.4802"] == YES);
     
 }
 
