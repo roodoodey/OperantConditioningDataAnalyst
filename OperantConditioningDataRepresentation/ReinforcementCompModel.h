@@ -31,6 +31,5 @@
 -(NSString*)avgBehaviorForLine:(NSUInteger)theLindeIndex;
 -(NSString*)avgReinforcerForLine:(NSUInteger)theLineIndex;
 
-#pragma mark - Download
 
 @end

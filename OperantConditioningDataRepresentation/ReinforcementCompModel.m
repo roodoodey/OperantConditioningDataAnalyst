@@ -351,7 +351,7 @@
     return [UIColor flatPinkColor];
 }
 
--(int)numUsersForLineIndex:(int)theLineIndex {
+-(int)numUsersForLineIndex:(NSUInteger)theLineIndex {
     
     int numUsers = 0;
     
