@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+#import "MAXOperantCondDataMan.h"
+
 @interface ReinforcementCompViewController : UIViewController
 
 @property (nonatomic, strong) NSArray *users;
+@property (nonatomic, strong) MAXOperantCondDataMan *dataMan;
 
 @end

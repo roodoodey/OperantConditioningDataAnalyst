@@ -9,17 +9,24 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#import "MAXOperantCondDataMan.h"
+
 @interface ReinforcementScheduleDetailViewModel : NSObject
 
--(id)initWithRandomUser:(NSArray*)randomUsers withReinforcementSchedule:(NSNumber*)reinforcementSchedule;
+-(id)initWithReinforcementSchedule:(NSNumber*)reinforcementSchedule dataMan:(MAXOperantCondDataMan*)theDataMan;
 
 -(NSString*)reinforcementTitleForNum:(NSNumber*)reinforcementNum;
 
+#pragma mark - Reinforcer Data
+
+-(NSUInteger)numReinforcersForLineAtIndex:(NSInteger)theIndex;
+-(CGFloat)reinforcerValueAtX:(NSInteger)xIndex lineIndex:(NSInteger)theLine;
 
 #pragma mark - Block Data
 
 -(NSString*)titleForRow:(NSInteger)theRow col:(NSInteger)theCol;
 -(NSString*)dataTitleForRow:(NSInteger)theRow col:(NSInteger)theCol;
+
 
 #pragma mark - Chart Data
 
@@ -32,9 +39,5 @@
 -(NSUInteger)numValuesForLineAtIndex:(NSUInteger)theIndex;
 -(CGFloat)valueForLineAtIndex:(NSUInteger)theLineIndex withHorizontalIndex:(NSUInteger)theHorizontalIndex;
 
-#pragma mark - Download Methods
-
--(void)downloadBehaviorWithLastObjectId:(NSString*)theLastObjectId WithCompletion:(void (^)(BOOL succeeded))block;
--(void)downloadReinforcersSkipping:(NSInteger)skipAmount withCompletion:(void (^)(NSError *theError))block;
 
 @end

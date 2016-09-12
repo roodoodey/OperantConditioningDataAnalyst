@@ -7,19 +7,39 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4EFE87521D7F248700AF61BB /* MAXPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFE874F1D7F248700AF61BB /* MAXPageControl.m */; };
+		4EFE87531D7F248700AF61BB /* MAXPagingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFE87511D7F248700AF61BB /* MAXPagingScrollView.m */; };
+		8849A4F01C8BB534004567F4 /* MNFJsonAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F711C8B84F000DFEBAD /* MNFJsonAdapter.m */; };
+		8849A4F11C8BB53B004567F4 /* NSObject+MenigaRuntimeExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F741C8B84F000DFEBAD /* NSObject+MenigaRuntimeExtension.m */; };
+		8849A4F21C8BB53E004567F4 /* NSString+MNFExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F761C8B84F000DFEBAD /* NSString+MNFExtension.m */; };
+		8849A4F41C8BFAD9004567F4 /* ReinforcerTest.json in Resources */ = {isa = PBXBuildFile; fileRef = 8849A4F31C8BFAD9004567F4 /* ReinforcerTest.json */; };
+		8849A4F61C8BFBE2004567F4 /* BehaviorTest.json in Resources */ = {isa = PBXBuildFile; fileRef = 8849A4F51C8BFBE2004567F4 /* BehaviorTest.json */; };
+		8849A4F81C8BFC07004567F4 /* RandomUserTest.json in Resources */ = {isa = PBXBuildFile; fileRef = 8849A4F71C8BFC07004567F4 /* RandomUserTest.json */; };
+		8849A4FA1C8BFD48004567F4 /* OperantConditioningDataMockTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8849A4F91C8BFD48004567F4 /* OperantConditioningDataMockTest.m */; };
 		88729A341B9E3B670014507E /* Behavior.m in Sources */ = {isa = PBXBuildFile; fileRef = 88729A331B9E3B670014507E /* Behavior.m */; };
 		88729A371B9EE1BE0014507E /* Reinforcer.m in Sources */ = {isa = PBXBuildFile; fileRef = 88729A361B9EE1BE0014507E /* Reinforcer.m */; };
+		887F96B51D82FE2B00E39C90 /* MAXLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 887F96B41D82FE2B00E39C90 /* MAXLineChartView.m */; };
 		88821F521C1904E600B99DD2 /* ReinforcementCompViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88821F511C1904E600B99DD2 /* ReinforcementCompViewController.m */; };
 		88821F551C19061A00B99DD2 /* ReinforcementCompModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 88821F541C19061A00B99DD2 /* ReinforcementCompModel.m */; };
 		888F828B1BA79E0000A92E5F /* ReinforcementScheduleDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 888F828A1BA79E0000A92E5F /* ReinforcementScheduleDetailViewController.m */; };
 		888F828E1BA79E1000A92E5F /* ReinforcementScheduleDetailViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 888F828D1BA79E1000A92E5F /* ReinforcementScheduleDetailViewModel.m */; };
 		889163671C171E320039D67F /* MAXBlockView.m in Sources */ = {isa = PBXBuildFile; fileRef = 889163661C171E320039D67F /* MAXBlockView.m */; };
+		88C8354D1C8B992300E5D8C5 /* MAXOperantCondDataMan.m in Sources */ = {isa = PBXBuildFile; fileRef = 88C8354C1C8B992300E5D8C5 /* MAXOperantCondDataMan.m */; };
 		88DB6F771C8B84F000DFEBAD /* MNFJsonAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F711C8B84F000DFEBAD /* MNFJsonAdapter.m */; };
 		88DB6F781C8B84F000DFEBAD /* NSObject+MenigaRuntimeExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F741C8B84F000DFEBAD /* NSObject+MenigaRuntimeExtension.m */; };
 		88DB6F791C8B84F000DFEBAD /* NSString+MNFExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F761C8B84F000DFEBAD /* NSString+MNFExtension.m */; };
 		88DB6F7F1C8B87DF00DFEBAD /* Behavior.json in Resources */ = {isa = PBXBuildFile; fileRef = 88DB6F7C1C8B87DF00DFEBAD /* Behavior.json */; };
 		88DB6F801C8B87DF00DFEBAD /* RandomUser.json in Resources */ = {isa = PBXBuildFile; fileRef = 88DB6F7D1C8B87DF00DFEBAD /* RandomUser.json */; };
 		88DB6F811C8B87DF00DFEBAD /* Reinforcer.json in Resources */ = {isa = PBXBuildFile; fileRef = 88DB6F7E1C8B87DF00DFEBAD /* Reinforcer.json */; };
+		88DB6F821C8B884700DFEBAD /* Behavior.json in Resources */ = {isa = PBXBuildFile; fileRef = 88DB6F7C1C8B87DF00DFEBAD /* Behavior.json */; };
+		88DB6F831C8B884B00DFEBAD /* RandomUser.json in Resources */ = {isa = PBXBuildFile; fileRef = 88DB6F7D1C8B87DF00DFEBAD /* RandomUser.json */; };
+		88DB6F841C8B884D00DFEBAD /* Reinforcer.json in Resources */ = {isa = PBXBuildFile; fileRef = 88DB6F7E1C8B87DF00DFEBAD /* Reinforcer.json */; };
+		88DB6F881C8B890A00DFEBAD /* MAXBehavior.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F871C8B890A00DFEBAD /* MAXBehavior.m */; };
+		88DB6F891C8B891100DFEBAD /* MAXBehavior.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F871C8B890A00DFEBAD /* MAXBehavior.m */; };
+		88DB6F8C1C8B891E00DFEBAD /* MAXReinforcer.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F8B1C8B891E00DFEBAD /* MAXReinforcer.m */; };
+		88DB6F8D1C8B891E00DFEBAD /* MAXReinforcer.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F8B1C8B891E00DFEBAD /* MAXReinforcer.m */; };
+		88DB6F901C8B899700DFEBAD /* MAXRandomUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F8F1C8B899700DFEBAD /* MAXRandomUser.m */; };
+		88DB6F911C8B899700DFEBAD /* MAXRandomUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F8F1C8B899700DFEBAD /* MAXRandomUser.m */; };
 		88DF19A61B97E2A5009B076B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DF19A51B97E2A5009B076B /* main.m */; };
 		88DF19A91B97E2A5009B076B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DF19A81B97E2A5009B076B /* AppDelegate.m */; };
 		88DF19AC1B97E2A5009B076B /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DF19AB1B97E2A5009B076B /* MainViewController.m */; };
@@ -86,10 +106,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4EFE874E1D7F248700AF61BB /* MAXPageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAXPageControl.h; sourceTree = "<group>"; };
+		4EFE874F1D7F248700AF61BB /* MAXPageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAXPageControl.m; sourceTree = "<group>"; };
+		4EFE87501D7F248700AF61BB /* MAXPagingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAXPagingScrollView.h; sourceTree = "<group>"; };
+		4EFE87511D7F248700AF61BB /* MAXPagingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAXPagingScrollView.m; sourceTree = "<group>"; };
+		8849A4F31C8BFAD9004567F4 /* ReinforcerTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ReinforcerTest.json; sourceTree = "<group>"; };
+		8849A4F51C8BFBE2004567F4 /* BehaviorTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = BehaviorTest.json; sourceTree = "<group>"; };
+		8849A4F71C8BFC07004567F4 /* RandomUserTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RandomUserTest.json; sourceTree = "<group>"; };
+		8849A4F91C8BFD48004567F4 /* OperantConditioningDataMockTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperantConditioningDataMockTest.m; sourceTree = "<group>"; };
 		88729A321B9E3B670014507E /* Behavior.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Behavior.h; sourceTree = "<group>"; };
 		88729A331B9E3B670014507E /* Behavior.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Behavior.m; sourceTree = "<group>"; };
 		88729A351B9EE1BE0014507E /* Reinforcer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reinforcer.h; sourceTree = "<group>"; };
 		88729A361B9EE1BE0014507E /* Reinforcer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reinforcer.m; sourceTree = "<group>"; };
+		887F96B31D82FE2B00E39C90 /* MAXLineChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAXLineChartView.h; sourceTree = "<group>"; };
+		887F96B41D82FE2B00E39C90 /* MAXLineChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAXLineChartView.m; sourceTree = "<group>"; };
 		88821F501C1904E600B99DD2 /* ReinforcementCompViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReinforcementCompViewController.h; sourceTree = "<group>"; };
 		88821F511C1904E600B99DD2 /* ReinforcementCompViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReinforcementCompViewController.m; sourceTree = "<group>"; };
 		88821F531C19061A00B99DD2 /* ReinforcementCompModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReinforcementCompModel.h; sourceTree = "<group>"; };
@@ -101,6 +131,8 @@
 		888F82AB1BAA444800A92E5F /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		889163651C171E320039D67F /* MAXBlockView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAXBlockView.h; sourceTree = "<group>"; };
 		889163661C171E320039D67F /* MAXBlockView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAXBlockView.m; sourceTree = "<group>"; };
+		88C8354B1C8B992300E5D8C5 /* MAXOperantCondDataMan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAXOperantCondDataMan.h; sourceTree = "<group>"; };
+		88C8354C1C8B992300E5D8C5 /* MAXOperantCondDataMan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAXOperantCondDataMan.m; sourceTree = "<group>"; };
 		88DB6F701C8B84F000DFEBAD /* MNFJsonAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNFJsonAdapter.h; sourceTree = "<group>"; };
 		88DB6F711C8B84F000DFEBAD /* MNFJsonAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNFJsonAdapter.m; sourceTree = "<group>"; };
 		88DB6F721C8B84F000DFEBAD /* MNFJsonAdapterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNFJsonAdapterDelegate.h; sourceTree = "<group>"; };
@@ -111,6 +143,12 @@
 		88DB6F7C1C8B87DF00DFEBAD /* Behavior.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Behavior.json; sourceTree = "<group>"; };
 		88DB6F7D1C8B87DF00DFEBAD /* RandomUser.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RandomUser.json; sourceTree = "<group>"; };
 		88DB6F7E1C8B87DF00DFEBAD /* Reinforcer.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Reinforcer.json; sourceTree = "<group>"; };
+		88DB6F861C8B890A00DFEBAD /* MAXBehavior.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAXBehavior.h; sourceTree = "<group>"; };
+		88DB6F871C8B890A00DFEBAD /* MAXBehavior.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAXBehavior.m; sourceTree = "<group>"; };
+		88DB6F8A1C8B891E00DFEBAD /* MAXReinforcer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAXReinforcer.h; sourceTree = "<group>"; };
+		88DB6F8B1C8B891E00DFEBAD /* MAXReinforcer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAXReinforcer.m; sourceTree = "<group>"; };
+		88DB6F8E1C8B899700DFEBAD /* MAXRandomUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAXRandomUser.h; sourceTree = "<group>"; };
+		88DB6F8F1C8B899700DFEBAD /* MAXRandomUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAXRandomUser.m; sourceTree = "<group>"; };
 		88DF19A01B97E2A5009B076B /* OperantConditioningDataRepresentation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OperantConditioningDataRepresentation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88DF19A41B97E2A5009B076B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		88DF19A51B97E2A5009B076B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -224,6 +262,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4EFE874D1D7F244F00AF61BB /* Paging scroll view */ = {
+			isa = PBXGroup;
+			children = (
+				4EFE874E1D7F248700AF61BB /* MAXPageControl.h */,
+				4EFE874F1D7F248700AF61BB /* MAXPageControl.m */,
+				4EFE87501D7F248700AF61BB /* MAXPagingScrollView.h */,
+				4EFE87511D7F248700AF61BB /* MAXPagingScrollView.m */,
+			);
+			name = "Paging scroll view";
+			sourceTree = "<group>";
+		};
+		4EFE87541D7F273200AF61BB /* Line Chart View */ = {
+			isa = PBXGroup;
+			children = (
+				887F96B31D82FE2B00E39C90 /* MAXLineChartView.h */,
+				887F96B41D82FE2B00E39C90 /* MAXLineChartView.m */,
+			);
+			name = "Line Chart View";
+			sourceTree = "<group>";
+		};
 		88821F4F1C1904BB00B99DD2 /* Reinforcement Comparison  */ = {
 			isa = PBXGroup;
 			children = (
@@ -272,8 +330,26 @@
 		88DB6F7B1C8B862100DFEBAD /* Json Data */ = {
 			isa = PBXGroup;
 			children = (
+				8849A4F71C8BFC07004567F4 /* RandomUserTest.json */,
+				8849A4F51C8BFBE2004567F4 /* BehaviorTest.json */,
+				8849A4F31C8BFAD9004567F4 /* ReinforcerTest.json */,
 			);
 			name = "Json Data";
+			sourceTree = "<group>";
+		};
+		88DB6F851C8B88DD00DFEBAD /* Normal Model Objects */ = {
+			isa = PBXGroup;
+			children = (
+				88DB6F861C8B890A00DFEBAD /* MAXBehavior.h */,
+				88DB6F871C8B890A00DFEBAD /* MAXBehavior.m */,
+				88DB6F8A1C8B891E00DFEBAD /* MAXReinforcer.h */,
+				88DB6F8B1C8B891E00DFEBAD /* MAXReinforcer.m */,
+				88DB6F8E1C8B899700DFEBAD /* MAXRandomUser.h */,
+				88DB6F8F1C8B899700DFEBAD /* MAXRandomUser.m */,
+				88C8354B1C8B992300E5D8C5 /* MAXOperantCondDataMan.h */,
+				88C8354C1C8B992300E5D8C5 /* MAXOperantCondDataMan.m */,
+			);
+			name = "Normal Model Objects";
 			sourceTree = "<group>";
 		};
 		88DF19971B97E2A5009B076B = {
@@ -297,9 +373,10 @@
 		88DF19A21B97E2A5009B076B /* OperantConditioningDataRepresentation */ = {
 			isa = PBXGroup;
 			children = (
+				88DB6F851C8B88DD00DFEBAD /* Normal Model Objects */,
 				88DF1A081B98746F009B076B /* User Defaults */,
 				88DF1A031B97E900009B076B /* Parse Model Objects */,
-				88DF19EA1B97E6DF009B076B /* Libraries & Categories */,
+				88DF19EA1B97E6DF009B076B /* Libraries, Categories and Reusable Components */,
 				88DF19A71B97E2A5009B076B /* AppDelegate.h */,
 				88DF19A81B97E2A5009B076B /* AppDelegate.m */,
 				88DF1A2B1B9879A1009B076B /* UI */,
@@ -330,6 +407,7 @@
 				88DB6F7B1C8B862100DFEBAD /* Json Data */,
 				88DB6F7A1C8B85AA00DFEBAD /* Json Adapter */,
 				88DF19BF1B97E2A5009B076B /* OperantConditioningDataRepresentationTests.m */,
+				8849A4F91C8BFD48004567F4 /* OperantConditioningDataMockTest.m */,
 				88DF19BD1B97E2A5009B076B /* Supporting Files */,
 			);
 			path = OperantConditioningDataRepresentationTests;
@@ -366,15 +444,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		88DF19EA1B97E6DF009B076B /* Libraries & Categories */ = {
+		88DF19EA1B97E6DF009B076B /* Libraries, Categories and Reusable Components */ = {
 			isa = PBXGroup;
 			children = (
+				4EFE87541D7F273200AF61BB /* Line Chart View */,
+				4EFE874D1D7F244F00AF61BB /* Paging scroll view */,
 				88FFA9FE1B9E20160076E04A /* JawBone */,
 				88DF1A071B97ECA5009B076B /* Font */,
 				88DF19EC1B97E6EF009B076B /* Progress Indicator */,
 				88DF19EB1B97E6EA009B076B /* Color */,
 			);
-			name = "Libraries & Categories";
+			name = "Libraries, Categories and Reusable Components";
 			sourceTree = "<group>";
 		};
 		88DF19EB1B97E6EA009B076B /* Color */ = {
@@ -631,6 +711,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8849A4F81C8BFC07004567F4 /* RandomUserTest.json in Resources */,
+				88DB6F821C8B884700DFEBAD /* Behavior.json in Resources */,
+				8849A4F61C8BFBE2004567F4 /* BehaviorTest.json in Resources */,
+				8849A4F41C8BFAD9004567F4 /* ReinforcerTest.json in Resources */,
+				88DB6F841C8B884D00DFEBAD /* Reinforcer.json in Resources */,
+				88DB6F831C8B884B00DFEBAD /* RandomUser.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -642,20 +728,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				88DF19FB1B97E711009B076B /* UIColor+Chameleon.m in Sources */,
+				88DB6F901C8B899700DFEBAD /* MAXRandomUser.m in Sources */,
 				88821F521C1904E600B99DD2 /* ReinforcementCompViewController.m in Sources */,
 				88729A371B9EE1BE0014507E /* Reinforcer.m in Sources */,
+				88DB6F8C1C8B891E00DFEBAD /* MAXReinforcer.m in Sources */,
+				88DB6F881C8B890A00DFEBAD /* MAXBehavior.m in Sources */,
 				88FFAA071B9E20250076E04A /* JBLineChartView.m in Sources */,
+				4EFE87521D7F248700AF61BB /* MAXPageControl.m in Sources */,
 				88DF19FC1B97E711009B076B /* UIColor+CIELAB.m in Sources */,
 				88DF1A331B991A89009B076B /* UsersOverviewViewModel.m in Sources */,
 				889163671C171E320039D67F /* MAXBlockView.m in Sources */,
 				88DF1A301B987D92009B076B /* UsersOverviewViewController.m in Sources */,
+				887F96B51D82FE2B00E39C90 /* MAXLineChartView.m in Sources */,
 				888F828B1BA79E0000A92E5F /* ReinforcementScheduleDetailViewController.m in Sources */,
 				88DF19F91B97E711009B076B /* ChameleonStatusBar.m in Sources */,
+				8849A4F21C8BB53E004567F4 /* NSString+MNFExtension.m in Sources */,
+				4EFE87531D7F248700AF61BB /* MAXPagingScrollView.m in Sources */,
 				88DF1A0E1B9876F9009B076B /* UIFont+ArialAndHelveticaNeue.m in Sources */,
 				88DF1A061B97E93C009B076B /* RandomUser.m in Sources */,
 				88FFAA0A1B9E25E60076E04A /* UserDetailViewModel.m in Sources */,
 				88DF1A0B1B98747F009B076B /* UserDefaults.m in Sources */,
+				8849A4F01C8BB534004567F4 /* MNFJsonAdapter.m in Sources */,
 				88821F551C19061A00B99DD2 /* ReinforcementCompModel.m in Sources */,
+				8849A4F11C8BB53B004567F4 /* NSObject+MenigaRuntimeExtension.m in Sources */,
 				88DF19FD1B97E711009B076B /* UIViewController+Chameleon.m in Sources */,
 				88FFAA051B9E20250076E04A /* JBBarChartView.m in Sources */,
 				88DF1A001B97E725009B076B /* MBProgressHUD.m in Sources */,
@@ -667,6 +762,7 @@
 				88FFAA061B9E20250076E04A /* JBChartView.m in Sources */,
 				88DF19FA1B97E711009B076B /* NSArray+Chameleon.m in Sources */,
 				888F828E1BA79E1000A92E5F /* ReinforcementScheduleDetailViewModel.m in Sources */,
+				88C8354D1C8B992300E5D8C5 /* MAXOperantCondDataMan.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -674,10 +770,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88DB6F911C8B899700DFEBAD /* MAXRandomUser.m in Sources */,
 				88DF19C01B97E2A5009B076B /* OperantConditioningDataRepresentationTests.m in Sources */,
+				8849A4FA1C8BFD48004567F4 /* OperantConditioningDataMockTest.m in Sources */,
 				88DB6F771C8B84F000DFEBAD /* MNFJsonAdapter.m in Sources */,
 				88DB6F781C8B84F000DFEBAD /* NSObject+MenigaRuntimeExtension.m in Sources */,
 				88DB6F791C8B84F000DFEBAD /* NSString+MNFExtension.m in Sources */,
+				88DB6F891C8B891100DFEBAD /* MAXBehavior.m in Sources */,
+				88DB6F8D1C8B891E00DFEBAD /* MAXReinforcer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

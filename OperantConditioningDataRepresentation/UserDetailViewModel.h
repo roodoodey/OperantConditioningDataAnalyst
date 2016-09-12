@@ -40,4 +40,8 @@
 -(NSUInteger)numberOfVerticalValuesAtIndes:(NSUInteger)lineIndex;
 -(CGFloat)verticalValueForHorizontalIndex:(NSUInteger)horizontalIndex;
 
+// Reinforcer decoration view data
+-(NSInteger)numberOfReinforcers;
+-(double)horizontalValueForReinforcerAtIndex:(NSUInteger)theIndex;
+
 @end

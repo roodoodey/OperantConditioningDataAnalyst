@@ -9,9 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#import "MAXOperantCondDataMan.h"
+
 @interface ReinforcementCompModel : NSObject
 
--(id)initWithUsers:(NSArray*)theUsers;
+-(id)initWithUsers:(NSArray*)theUsers dataMan:(MAXOperantCondDataMan*)theDataMan;
 
 #pragma mark - Charts 
 
@@ -30,8 +32,5 @@
 -(NSString*)avgReinforcerForLine:(NSUInteger)theLineIndex;
 
 #pragma mark - Download
-
--(void)downloadBehaviorWithUserId:(NSString*)theObjectId withCompletion:(void (^)(NSError *error))block;
--(void)downloadReinforcerWithUserId:(NSString*)theObjectId withCompletion:(void (^)(NSError *error))block;
 
 @end

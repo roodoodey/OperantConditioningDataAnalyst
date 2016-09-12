@@ -414,4 +414,16 @@ const int maxTimePlayed = 610;
 }
 
 
+#pragma mark - Reinforcer decoration data
+
+-(NSInteger)numberOfReinforcers {
+    
+    return _reinforerArray.count;
+}
+
+-(double)horizontalValueForReinforcerAtIndex:(NSUInteger)theIndex {
+    
+    return [[(Reinforcer *)[_reinforerArray objectAtIndex: theIndex] elapsedTime] doubleValue];
+}
+
 @end

@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+#import "MAXOperantCondDataMan.h"
+
 @interface ReinforcementScheduleDetailViewController : UIViewController
 
 @property (nonatomic, strong) NSArray *randomUsers;
 @property (nonatomic, strong) NSNumber *reinforcementSchedule;
+
+@property (nonatomic, strong) MAXOperantCondDataMan *dataMan;
 
 @end

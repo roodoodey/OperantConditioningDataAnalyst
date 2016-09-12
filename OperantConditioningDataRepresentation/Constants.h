@@ -30,12 +30,12 @@ enum {
     kFifthAmount = 4
 };
 
-enum {
+typedef enum {
     kNoSchedule = 0,
     kFISchedule = 1,
     kVISchedule = 2,
     kFRSchedule = 3,
     kVRSchedule = 4
-};
+} ReinforcementSchedule;
 
 #endif

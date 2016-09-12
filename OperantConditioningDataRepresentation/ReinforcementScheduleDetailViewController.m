@@ -14,11 +14,18 @@
 #import "UIFont+ArialAndHelveticaNeue.h"
 #import "MBProgressHUD.h"
 
+#import "MAXPagingScrollView.h"
+#import "MAXLineChartView.h"
 
-@interface ReinforcementScheduleDetailViewController () <MAXBlockViewDelegate, MAXBlockViewDatasource, JBLineChartViewDataSource, JBLineChartViewDelegate> {
+@interface ReinforcementScheduleDetailViewController () <MAXBlockViewDelegate, MAXBlockViewDatasource, JBLineChartViewDataSource, JBLineChartViewDelegate, MAXLineChartDelegate, MAXLineChartDataSource> {
+    
+    NSArray *_scheduleUsers;
+    
     ReinforcementScheduleDetailViewModel *_viewModel;
     JBLineChartView *_lineChart;
     UIScrollView *_scrollView;
+    UIScrollView *_bigChartScrollView;
+    MAXLineChartView *_bigLineChart;
 }
 
 @end
@@ -28,7 +35,8 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     
-    _viewModel = [[ReinforcementScheduleDetailViewModel alloc] initWithRandomUser:_randomUsers withReinforcementSchedule:_reinforcementSchedule];
+    _viewModel = [[ReinforcementScheduleDetailViewModel alloc] initWithReinforcementSchedule:self.reinforcementSchedule dataMan:self.dataMan];
+    
     
     // navigation bar
     UIView *navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 64)];
@@ -52,87 +60,221 @@
     title.font = [UIFont maxwellBoldWithSize:19.0];
     [navBar addSubview:title];
     
-    // containing scroll view
-    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(navBar.frame), CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - CGRectGetHeight(navBar.frame))];
-    [self.view addSubview:_scrollView];
+    MAXPagingScrollView *pagingScrollView = [[MAXPagingScrollView alloc] initWithFrame: CGRectMake(0, CGRectGetHeight(navBar.frame), CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - CGRectGetHeight(navBar.frame))];
     
+    [pagingScrollView MAXScrollViewNumPagesWithBlock:^ NSInteger {
+       
+        return 2;
+    }];
     
-    // chart
-    _lineChart = [[JBLineChartView alloc] initWithFrame:CGRectMake(30, 40, CGRectGetWidth(self.view.frame) - 60, 240)];
-    _lineChart.delegate = self;
-    _lineChart.dataSource = self;
-    [_lineChart setMinimumValue:0];
-    [_lineChart setMaximumValue:[_viewModel maxYValue]];
-    [_scrollView addSubview:_lineChart];
-    
-    UIView *yAxis = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(_lineChart.frame) - 2, CGRectGetMinY(_lineChart.frame), 2, CGRectGetHeight(_lineChart.frame))];
-    yAxis.backgroundColor = [UIColor flatSkyBlueColor];
-    [_scrollView addSubview:yAxis];
-    
-    UIView *xAxis = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(_lineChart.frame) - 2, CGRectGetMaxY(_lineChart.frame), CGRectGetWidth(_lineChart.frame) + 2, 2)];
-    xAxis.backgroundColor = [UIColor flatSkyBlueColor];
-    [_scrollView addSubview:xAxis];
-    
-    UILabel *chartXAxisLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMidX(self.view.frame) - 90, CGRectGetMaxY(_lineChart.frame), 180, 40)];
-    chartXAxisLabel.textAlignment = NSTextAlignmentCenter;
-    chartXAxisLabel.textColor = [UIColor flatSkyBlueColor];
-    chartXAxisLabel.text = @"Time (s)";
-    chartXAxisLabel.font = [UIFont openSansBoldWithSize:18.0];
-    [_scrollView addSubview:chartXAxisLabel];
-    
-    UILabel *originLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_lineChart.frame) - 10, CGRectGetMaxY(_lineChart.frame), 20, 40)];
-    originLabel.textAlignment = NSTextAlignmentCenter;
-    originLabel.textColor = [UIColor flatSkyBlueColor];
-    originLabel.text = @"0";
-    originLabel.font = [UIFont openSansBoldWithSize:18.0];
-    [_scrollView addSubview:originLabel];
-    
-    
-    UILabel *maxValueLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_lineChart.frame) - 20, CGRectGetMaxY(_lineChart.frame), 40, 40)];
-    maxValueLabel.textAlignment = NSTextAlignmentCenter;
-    maxValueLabel.textColor = [UIColor flatSkyBlueColor];
-    maxValueLabel.text = [_viewModel maxXValueString];
-    maxValueLabel.font = [UIFont openSansBoldWithSize:18.0];
-    [_scrollView addSubview:maxValueLabel];
-    
-    
-    UILabel *maxYValueLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_lineChart.frame) - 25, 40, 50, CGRectGetMinY(_lineChart.frame) - CGRectGetHeight(navBar.frame))];
-    maxYValueLabel.textAlignment = NSTextAlignmentCenter;
-    maxYValueLabel.textColor = [UIColor flatSkyBlueColor];
-    maxYValueLabel.text = [_viewModel maxYValueString];
-    maxYValueLabel.font = [UIFont openSansBoldWithSize:18.0];
-    [_scrollView addSubview:maxYValueLabel];
-    
-    
-    MAXBlockView *blockView = [[MAXBlockView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_lineChart.frame) + 40, CGRectGetWidth(self.view.frame), 400)];
-    blockView.delegate = self;
-    blockView.datasource = self;
-    [blockView reloadData];
-    [_scrollView addSubview:blockView];
-    
-    
-    MBProgressHUD *progressHud = [MBProgressHUD showHUDAddedTo:_lineChart animated:YES];
-    progressHud.mode = MBProgressHUDModeIndeterminate;
-    
-    [_viewModel downloadBehaviorWithLastObjectId:nil WithCompletion:^(BOOL succeeded) {
-        
-        [progressHud hide:YES];
-        
-        if (succeeded == YES) {
-            [_lineChart reloadData];
-            [blockView reloadData];
+    [pagingScrollView MAXScrollViewWithViewAtPageBlock:^(UIView *theView, NSInteger page) {
+       
+        if (page == 0) {
+            [theView addSubview: [self p_createFirstScrollView]];
+        }
+        else if(page == 1) {
+            [theView addSubview: [self p_createBigChart]];
         }
         
     }];
     
-    [_viewModel downloadReinforcersSkipping:0 withCompletion:^(NSError *theError) {
-        
-        if (theError == nil) {
-            [blockView reloadData];
-        }
-        
-    }];
+    [self.view addSubview: pagingScrollView];
     
+    
+}
+
+#pragma mark - Create Views
+
+-(UIScrollView *)p_createFirstScrollView {
+    
+    if (_scrollView == nil) {
+        
+        // containing scroll view
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - 64)];
+        [self.view addSubview:_scrollView];
+        
+        
+        // chart
+        _lineChart = [[JBLineChartView alloc] initWithFrame:CGRectMake(30, 40, CGRectGetWidth(self.view.frame) - 60, 240)];
+        _lineChart.delegate = self;
+        _lineChart.dataSource = self;
+        [_lineChart setMinimumValue:0];
+        [_lineChart setMaximumValue:[_viewModel maxYValue]];
+        [_scrollView addSubview:_lineChart];
+        
+        UIView *yAxis = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(_lineChart.frame) - 2, CGRectGetMinY(_lineChart.frame), 2, CGRectGetHeight(_lineChart.frame))];
+        yAxis.backgroundColor = [UIColor flatSkyBlueColor];
+        [_scrollView addSubview:yAxis];
+        
+        UIView *xAxis = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(_lineChart.frame) - 2, CGRectGetMaxY(_lineChart.frame), CGRectGetWidth(_lineChart.frame) + 2, 2)];
+        xAxis.backgroundColor = [UIColor flatSkyBlueColor];
+        [_scrollView addSubview:xAxis];
+        
+        UILabel *chartXAxisLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMidX(self.view.frame) - 90, CGRectGetMaxY(_lineChart.frame), 180, 40)];
+        chartXAxisLabel.textAlignment = NSTextAlignmentCenter;
+        chartXAxisLabel.textColor = [UIColor flatSkyBlueColor];
+        chartXAxisLabel.text = @"Time (s)";
+        chartXAxisLabel.font = [UIFont openSansBoldWithSize:18.0];
+        [_scrollView addSubview:chartXAxisLabel];
+        
+        UILabel *originLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_lineChart.frame) - 10, CGRectGetMaxY(_lineChart.frame), 20, 40)];
+        originLabel.textAlignment = NSTextAlignmentCenter;
+        originLabel.textColor = [UIColor flatSkyBlueColor];
+        originLabel.text = @"0";
+        originLabel.font = [UIFont openSansBoldWithSize:18.0];
+        [_scrollView addSubview:originLabel];
+        
+        
+        UILabel *maxValueLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_lineChart.frame) - 20, CGRectGetMaxY(_lineChart.frame), 40, 40)];
+        maxValueLabel.textAlignment = NSTextAlignmentCenter;
+        maxValueLabel.textColor = [UIColor flatSkyBlueColor];
+        maxValueLabel.text = [_viewModel maxXValueString];
+        maxValueLabel.font = [UIFont openSansBoldWithSize:18.0];
+        [_scrollView addSubview:maxValueLabel];
+        
+        
+        UILabel *maxYValueLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_lineChart.frame) - 25, 40, 50, CGRectGetMinY(_lineChart.frame) - 64)];
+        maxYValueLabel.textAlignment = NSTextAlignmentCenter;
+        maxYValueLabel.textColor = [UIColor flatSkyBlueColor];
+        maxYValueLabel.text = [_viewModel maxYValueString];
+        maxYValueLabel.font = [UIFont openSansBoldWithSize:18.0];
+        [_scrollView addSubview:maxYValueLabel];
+        
+        
+        MAXBlockView *blockView = [[MAXBlockView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_lineChart.frame) + 40, CGRectGetWidth(self.view.frame), 400)];
+        blockView.delegate = self;
+        blockView.datasource = self;
+        [blockView reloadData];
+        [_scrollView addSubview:blockView];
+        
+        
+        [_lineChart reloadData];
+        
+    }
+    
+    return _scrollView;
+}
+
+-(UIScrollView *)p_createBigChart {
+    
+    if (_bigChartScrollView == nil) {
+        
+        _bigChartScrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - 64)];
+        
+        [self.view addSubview: _bigChartScrollView];
+        
+        _bigLineChart = [[MAXLineChartView alloc] initWithFrame: CGRectMake(0, 0, CGRectGetHeight(self.view.frame) - 64, CGRectGetWidth(self.view.frame))];
+        _bigLineChart.delegate = self;
+        _bigLineChart.datasource = self;
+        [_bigLineChart reloadData];
+        _bigLineChart.layer.transform = CATransform3DMakeRotation(M_PI_2, 0, 0, 1.0);
+        _bigLineChart.frame = CGRectMake(0, 0, CGRectGetWidth(_bigLineChart.frame), CGRectGetHeight(_bigLineChart.frame));
+        
+        
+        [_bigChartScrollView addSubview: _bigLineChart];
+        
+        
+    }
+    
+    return _bigChartScrollView;
+}
+
+#pragma mark - MAX Cumulative Line Chart
+
+-(NSUInteger)MAXNumberOfLinesForChart:(MAXLineChartView *)theChartView {
+    
+    return [_viewModel numLines];
+}
+
+-(NSUInteger)MAXLineChart:(MAXLineChartView *)theChartView numberOfXValuesForLine:(NSUInteger)theLine {
+    
+    return [_viewModel numValuesForLineAtIndex: theLine];
+}
+
+-(double)MAXLineChart:(MAXLineChartView *)theChartView YValueAtX:(NSUInteger)theX line:(NSUInteger)theLine {
+    
+    double value = [_viewModel valueForLineAtIndex: theLine withHorizontalIndex: theX];
+    
+    return value;
+}
+
+-(double)MAXhighestYValueForLineChart:(MAXLineChartView *)theLineChart {
+    
+    return [_viewModel maxYValue];
+}
+
+-(CGFloat)MAXLineChart:(MAXLineChartView *)TheLineChart widthForLine:(NSUInteger)theLine {
+    
+    return 2.0;
+}
+
+-(UIColor *)MAXLineChart:(MAXLineChartView *)theLineChart strokeColorForLine:(NSUInteger)theLine {
+    
+    return [_viewModel colorForLineAtIndex: theLine];
+}
+
+-(UIColor *)MAXLineChartColorsForBordersForChart:(MAXLineChartView *)theLineChart {
+    
+    return [UIColor flatBlackColor];
+}
+
+-(CGFloat)MAXLineChartLeftBorderWidthForChart:(MAXLineChartView *)theLineChart {
+    
+    return 3.0;
+}
+
+-(CGFloat)MAXLineChartLowerBorderHeightForChart:(MAXLineChartView *)theLineChart {
+    
+    return 3.0;
+}
+
+-(NSUInteger)MAXLineChartNumberOfDecorationViewsForLeftBorder:(MAXLineChartView *)theLineChart {
+    
+    return 5;
+}
+
+-(NSUInteger)MAXLineChartNumberOfDecorationViewsForLowerBorder:(MAXLineChartView *)theLineChart {
+    
+    return 5;
+}
+
+#pragma mark - Decoration views for lines
+
+-(NSUInteger)MAXLineChart:(MAXLineChartView *)theChartView numDecorationViewsForLine:(NSUInteger)theLine {
+    
+    return [_viewModel numReinforcersForLineAtIndex: theLine];
+}
+
+-(UIView *)MAXLineChart:(MAXLineChartView *)theChartView decorationViewForLine:(NSUInteger)theLine atIndex:(NSUInteger)theIndex decorationViewPosition:(CGPoint)theDecorationViewPosition {
+    
+    UIView *comparisonView = [[UIView alloc] initWithFrame: CGRectMake( theDecorationViewPosition.x -1.5 - [self MAXLineChartLeftBorderWidthForChart: _bigLineChart], theDecorationViewPosition.y - 10, [self MAXLineChartLeftBorderWidthForChart: _bigLineChart] + [self MAXLineChartLeftBorderWidthForChart: _bigLineChart], 20)];
+    
+    comparisonView.backgroundColor = [UIColor blueColor];
+    
+    return comparisonView;
+    
+}
+
+#pragma mark - Margins
+
+-(CGFloat)MAXLineChartLeftMarginWidth:(MAXLineChartView *)theLineChart {
+    
+    return 50.0;
+}
+
+-(CGFloat)MAXLineChartRightMarginWidth:(MAXLineChartView *)theLineChart {
+    
+    return 20.0;
+}
+
+-(CGFloat)MAXLineChartUpperMarginHeight:(MAXLineChartView *)theLineChart {
+    
+    return 20.0;
+}
+
+-(CGFloat)MAXLineChartLowerMarginHeight:(MAXLineChartView *)theLineChart {
+    
+    return 40.0;
 }
 
 #pragma mark - Line Chart Delegate & Data Source

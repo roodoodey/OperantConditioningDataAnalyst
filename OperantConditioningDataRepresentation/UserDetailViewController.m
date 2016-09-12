@@ -13,9 +13,12 @@
 #import "UIFont+ArialAndHelveticaNeue.h"
 #import "MBProgressHUD.h"
 
+#import "MAXPagingScrollView.h"
+#import "MAXLineChartView.h"
 
-@interface UserDetailViewController () <JBLineChartViewDataSource, JBLineChartViewDelegate> {
+@interface UserDetailViewController () <JBLineChartViewDataSource, JBLineChartViewDelegate, MAXLineChartDelegate, MAXLineChartDataSource> {
     JBLineChartView *lineChart;
+    MAXLineChartView *_cumulativeLineChart;
     UserDetailViewModel *_viewModel;
     UILabel *avgTime, *avgReinforcerTime;
     UILabel *stdTime, *stdReinforcerTime;
@@ -57,9 +60,98 @@
     title.font = [UIFont maxwellBoldWithSize:19.0];
     [navBar addSubview:title];
     
+    CGFloat screenWidth = CGRectGetWidth(self.view.frame);
+    CGFloat screenHeight = CGRectGetHeight(self.view.frame) - 64;
+    
+    _cumulativeLineChart = [[MAXLineChartView alloc] initWithFrame:CGRectMake(30, 0, screenHeight, screenWidth)];
+    _cumulativeLineChart.datasource = self;
+    _cumulativeLineChart.delegate = self;
+    
+    MAXPagingScrollView *pageView = [[MAXPagingScrollView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - 64)];
+    
+    [pageView MAXScrollViewNumPagesWithBlock:^ NSInteger {
+        
+        return 2;
+    }];
+    
+    [pageView MAXScrollViewWithViewAtPageBlock:^(UIView *theView, NSInteger page) {
+       
+        if (page == 0) {
+            [theView addSubview: [self p_createSollViewOne]];
+        }
+        else {
+            [theView addSubview: _cumulativeLineChart];
+        }
+        
+    }];
+    
+    [self.view addSubview: pageView];
+    
+    MBProgressHUD *progressIndic = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    progressIndic.mode = MBProgressHUDModeIndeterminate;
+    
+    __weak typeof(self) wSelf = self;
+    
+    [_viewModel downloadBehaviorAndReinforcersWithCompletion:^(NSError *error) {
+        
+        if (!error) {
+            
+            [lineChart reloadData];
+            [_cumulativeLineChart reloadData];
+            
+            _cumulativeLineChart.layer.transform = CATransform3DMakeRotation(M_PI_2, 0, 0, 1.0);
+            _cumulativeLineChart.frame = CGRectMake(0, 0, CGRectGetWidth(_cumulativeLineChart.frame), CGRectGetHeight(_cumulativeLineChart.frame));
+            [pageView reloadDataBlocks];
+            
+            [wSelf updateData];
+        }
+        else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+            [alert show];
+        }
+        
+        [progressIndic hide:YES];
+        
+    }];
+    
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(void)backButtonPressed {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)updateData {
+    avgTime.text = [_viewModel avgBehavior];
+    stdTime.text = [_viewModel stdDevBehavior];
+    avgReinforcerTime.text = [_viewModel avgReinforcer];
+    stdReinforcerTime.text = [_viewModel stdDevReinforcer];
+    userGenderLabel.text = [_viewModel userGender];
+    userPlayFreq.text = [_viewModel userPlayFreq];
+    maxYValueLabel.text = [_viewModel maxYValue];
+}
+
+-(void)includeOrExcludeData:(UIButton*)sender {
+    [_viewModel includeOrExcludeData];
+    sender.selected = !sender.selected;
+    
+    if ([_viewModel isExcluded]) {
+        includeOrExcludeView.backgroundColor = [UIColor flatGreenColor];
+    }
+    else {
+        includeOrExcludeView.backgroundColor = [UIColor flatRedColor];
+    }
+    
+}
+
+-(UIScrollView *)p_createSollViewOne {
     
     // containing scroll view
-    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(navBar.frame), CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - CGRectGetHeight(navBar.frame))];
+    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - 64)];
     [self.view addSubview:_scrollView];
     
     // chart
@@ -99,7 +191,7 @@
     maxValueLabel.font = [UIFont openSansBoldWithSize:18.0];
     [_scrollView addSubview:maxValueLabel];
     
-    maxYValueLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(lineChart.frame) - 25, 40, 50, CGRectGetMinY(lineChart.frame) - CGRectGetHeight(navBar.frame))];
+    maxYValueLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(lineChart.frame) - 25, 40, 50, CGRectGetMinY(lineChart.frame) - 64)];
     maxYValueLabel.textAlignment = NSTextAlignmentCenter;
     maxYValueLabel.textColor = [UIColor flatSkyBlueColor];
     maxYValueLabel.text = [_viewModel maxYValue];
@@ -333,58 +425,10 @@
     _scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame), CGRectGetMaxY(includeOrExcludeView.frame));
     
     
-    MBProgressHUD *progressIndic = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    progressIndic.mode = MBProgressHUDModeIndeterminate;
-    
-    __weak typeof(self) wSelf = self;
-    
-    [_viewModel downloadBehaviorAndReinforcersWithCompletion:^(NSError *error) {
-       
-        if (!error) {
-            [lineChart reloadData];
-            [wSelf updateData];
-        }
-        else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
-            [alert show];
-        }
-        
-        [progressIndic hide:YES];
-        
-    }];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
--(void)backButtonPressed {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
--(void)updateData {
-    avgTime.text = [_viewModel avgBehavior];
-    stdTime.text = [_viewModel stdDevBehavior];
-    avgReinforcerTime.text = [_viewModel avgReinforcer];
-    stdReinforcerTime.text = [_viewModel stdDevReinforcer];
-    userGenderLabel.text = [_viewModel userGender];
-    userPlayFreq.text = [_viewModel userPlayFreq];
-    maxYValueLabel.text = [_viewModel maxYValue];
-}
-
--(void)includeOrExcludeData:(UIButton*)sender {
-    [_viewModel includeOrExcludeData];
-    sender.selected = !sender.selected;
-    
-    if ([_viewModel isExcluded]) {
-        includeOrExcludeView.backgroundColor = [UIColor flatGreenColor];
-    }
-    else {
-        includeOrExcludeView.backgroundColor = [UIColor flatRedColor];
-    }
+    return _scrollView;
     
 }
+
 
 #pragma mark - Line Chart Delegate & Data source
 
@@ -407,6 +451,170 @@
 -(CGFloat)lineChartView:(JBLineChartView *)lineChartView widthForLineAtLineIndex:(NSUInteger)lineIndex {
     return 2.0;
 }
+
+#pragma mark - line chart delegate
+
+-(NSUInteger)MAXNumberOfLinesForChart:(MAXLineChartView *)theChartView {
+    
+    return [_viewModel numberOfLines];
+}
+
+-(NSUInteger)MAXLineChart:(MAXLineChartView *)theChartView numberOfXValuesForLine:(NSUInteger)theLine {
+    
+    return [_viewModel numberOfVerticalValuesAtIndes: theLine];
+}
+
+-(double)MAXLineChart:(MAXLineChartView *)theChartView YValueAtX:(NSUInteger)theX line:(NSUInteger)theLine {
+    
+    CGFloat verticalValue = [_viewModel verticalValueForHorizontalIndex: theX];
+    return verticalValue;
+}
+
+-(UIColor *)MAXLineChart:(MAXLineChartView *)theLineChart strokeColorForLine:(NSUInteger)theLine {
+    
+    return [UIColor flatBlackColor];
+}
+
+-(double)MAXLineChart:(MAXLineChartView *)TheLineChart widthForLine:(NSUInteger)theLine {
+    
+    return 2.0;
+}
+
+-(double)MAXhighestYValueForLineChart:(MAXLineChartView *)theLineChart {
+    
+    return 1100;
+}
+
+-(double)MAXHighestXValueForLineChart:(MAXLineChartView *)theLineChart {
+    return 600;
+}
+
+-(double)MAXLineChartLeftBorderWidthForChart:(MAXLineChartView *)theLineChart {
+    
+    return 3;
+}
+
+-(double)MAXLineChartLowerBorderHeightForChart:(MAXLineChartView *)theLineChart {
+    
+    return 3;
+}
+
+-(UIColor *)MAXLineChartColorsForBordersForChart:(MAXLineChartView *)theLineChart {
+    
+    return [UIColor flatBlackColor];
+}
+
+
+#pragma mark - Line Decoration Views
+
+-(NSUInteger)MAXLineChart:(MAXLineChartView *)theChartView numDecorationViewsForLine:(NSUInteger)theLine {
+    
+    return [_viewModel numberOfReinforcers];
+}
+
+-(double)MAXLineChart:(MAXLineChartView *)theChartView xValueForDecorationViewForLine:(NSUInteger)theLine atIndex:(NSUInteger)theIndex {
+    
+    
+    return [_viewModel horizontalValueForReinforcerAtIndex: theIndex];
+}
+
+-(UIView *)MAXLineChart:(MAXLineChartView *)theChartView decorationViewForLine:(NSUInteger)theLine atIndex:(NSUInteger)theIndex decorationViewPosition:(CGPoint)theDecorationViewPosition {
+    
+    UIView *view = [[UIView alloc] initWithFrame: CGRectMake( theDecorationViewPosition.x - 0.5, theDecorationViewPosition.y - 1, 1, 10)];
+    view.backgroundColor = [UIColor flatBlackColor];
+    
+    return view;
+}
+
+
+#pragma mark - Left decoration views
+
+-(NSUInteger)MAXLineChartNumberOfDecorationViewsForLeftBorder:(MAXLineChartView *)theLineChart {
+    
+    return 5;
+}
+
+-(double)MAXLineChart:(MAXLineChartView *)theChartView yValueForLeftBorderDecorationViewAtIndex:(NSUInteger)theIndex {
+    
+    return theIndex * [self MAXhighestYValueForLineChart: _cumulativeLineChart] / ([self MAXLineChartNumberOfDecorationViewsForLeftBorder:  _cumulativeLineChart] -1);
+}
+
+-(UIView *)MAXLineChart:(MAXLineChartView *)theChartView leftBorderDecorationViewAxisCenterPoint:(CGPoint)theCenterPoint atIndex:(NSUInteger)theIndex {
+    
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(theCenterPoint.x - 1.5 - [self MAXLineChartLeftMarginWidth: _cumulativeLineChart], theCenterPoint.y - 10, [self MAXLineChartLeftMarginWidth: _cumulativeLineChart] + [self MAXLineChartLeftBorderWidthForChart: _cumulativeLineChart], 20)];
+    
+    
+    UIView *dotView = [[UIView alloc] initWithFrame: CGRectMake(CGRectGetWidth(container.frame) - 10, CGRectGetHeight(container.frame) / 2.0 - 0.5, 10, 1)];
+    dotView.backgroundColor = [UIColor blackColor];
+    [container addSubview: dotView];
+    
+    UILabel *indexValueLabel = [[UILabel alloc] initWithFrame: CGRectMake(0, 0, CGRectGetWidth(container.frame) - (CGRectGetWidth(container.frame) - CGRectGetMinX(dotView.frame)), CGRectGetHeight(container.frame))];
+    indexValueLabel.textAlignment = NSTextAlignmentCenter;
+    indexValueLabel.textColor = [UIColor flatBlackColor];
+    indexValueLabel.font = [UIFont helveticaNeueBoldWithSize: 12.0];
+    indexValueLabel.text = [NSString stringWithFormat:@"%.0f", [self MAXLineChart: _cumulativeLineChart yValueForLeftBorderDecorationViewAtIndex: theIndex]];
+    indexValueLabel.adjustsFontSizeToFitWidth = YES;
+    indexValueLabel.minimumScaleFactor = 0.7;
+    [container addSubview: indexValueLabel];
+    
+    return container;
+    
+}
+
+#pragma mark - Bottom Decoration Views
+
+-(NSUInteger)MAXLineChartNumberOfDecorationViewsForLowerBorder:(MAXLineChartView *)theLineChart {
+    
+    return 5;
+}
+
+-(double)MAXLineChart:(MAXLineChartView *)theChartView xValueForLowerBorderDecorationViewAtIndex:(NSUInteger)theIndex {
+    
+    return theIndex * [self MAXHighestXValueForLineChart: _cumulativeLineChart] / ([self MAXLineChartNumberOfDecorationViewsForLowerBorder: _cumulativeLineChart] - 1);
+}
+
+-(UIView *)MAXLineChart:(MAXLineChartView *)theChartView lowerBorderDecorationViewAxisCenterPoint:(CGPoint)theCenterPoint atIndex:(NSUInteger)theIndex {
+    
+    UIView *containerView = [[UIView alloc] initWithFrame: CGRectMake(theCenterPoint.x - 20, theCenterPoint.y - 1.5, 40, [self MAXLineChartLowerMarginHeight: _cumulativeLineChart] + [self MAXLineChartLowerBorderHeightForChart: _cumulativeLineChart])];
+    
+    UIView *dotView = [[UIView alloc] initWithFrame: CGRectMake(CGRectGetWidth(containerView.frame) / 2.0 - 0.5, 0, 1, 10)];
+    dotView.backgroundColor = [UIColor flatBlackColor];
+    [containerView addSubview: dotView];
+    
+    UILabel *indexValueLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(dotView.frame), CGRectGetWidth(containerView.frame), CGRectGetHeight(containerView.frame) - CGRectGetMaxY(dotView.frame))];
+    indexValueLabel.textAlignment = NSTextAlignmentCenter;
+    indexValueLabel.textColor = [UIColor flatBlackColor];
+    indexValueLabel.font = [UIFont helveticaNeueBoldWithSize: 12.0];
+    indexValueLabel.text = [NSString stringWithFormat:@"%.0f", [self MAXLineChart: _cumulativeLineChart xValueForLowerBorderDecorationViewAtIndex: theIndex]];
+    indexValueLabel.adjustsFontSizeToFitWidth = YES;
+    indexValueLabel.minimumScaleFactor = 0.7;
+    [containerView addSubview: indexValueLabel];
+    
+    return containerView;
+}
+
+#pragma mark - Marings
+
+-(CGFloat)MAXLineChartLeftMarginWidth:(MAXLineChartView *)theLineChart {
+    
+    return 50;
+}
+
+-(CGFloat)MAXLineChartRightMarginWidth:(MAXLineChartView *)theLineChart {
+    
+    return 20;
+}
+
+-(CGFloat)MAXLineChartUpperMarginHeight:(MAXLineChartView *)theLineChart {
+    
+    return  20;
+}
+
+-(CGFloat)MAXLineChartLowerMarginHeight:(MAXLineChartView *)theLineChart {
+    
+    return 30;
+}
+
 
 /*
 #pragma mark - Navigation

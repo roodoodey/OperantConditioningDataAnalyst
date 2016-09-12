@@ -15,10 +15,13 @@
 #import "UIFont+ArialAndHelveticaNeue.h"
 #import "Constants.h"
 #import "RandomUser.h"
+#import "MAXOperantCondDataMan.h"
 
 @interface MainViewController () <UITableViewDataSource, UITableViewDelegate> {
     UITableView *_tableView;
     NSArray *_users;
+    
+    MAXOperantCondDataMan *_dataMan;
 }
 
 @end
@@ -57,6 +60,10 @@
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
     
+    _dataMan = [[MAXOperantCondDataMan alloc] init];
+    _users = _dataMan.users;
+    
+    /*
     MBProgressHUD *progressIndic = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     progressIndic.mode = MBProgressHUDModeIndeterminate;
     
@@ -77,7 +84,7 @@
             }
         });
         
-    }];
+    }];*/
 }
 
 - (void)didReceiveMemoryWarning {
@@ -156,9 +163,13 @@
 #pragma mark - Navigation
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
     if ([segue.identifier isEqualToString:@"individualScheduleSegue"]) {
+        
         ReinforcementScheduleDetailViewController *reinforcementVC = (ReinforcementScheduleDetailViewController*)[segue destinationViewController];
+        
         reinforcementVC.randomUsers = _users;
+        reinforcementVC.dataMan = _dataMan;
         
         int row = (int)[_tableView indexPathForSelectedRow].row;
         
@@ -183,6 +194,7 @@
         
         ReinforcementCompViewController *compVC = (ReinforcementCompViewController*)[segue destinationViewController];
         compVC.users = _users;
+        compVC.dataMan = _dataMan;
         
     }
     

@@ -28,7 +28,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    _viewModel = [[ReinforcementCompModel alloc] initWithUsers:self.users];
+    _viewModel = [[ReinforcementCompModel alloc] initWithUsers:self.users dataMan:self.dataMan];
     
     // navigation bar
     UIView *navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 64)];
@@ -147,18 +147,8 @@
     
     [_scrollView setContentSize:CGSizeMake(CGRectGetWidth(self.view.frame), CGRectGetMaxY(blockView.frame))];
     
-    [_viewModel downloadBehaviorWithUserId:nil withCompletion:^(NSError *theError) {
-        if(theError == nil) {
-            [_lineChart reloadData];
-            [blockView reloadData];
-        }
-    }];
-    
-    [_viewModel downloadReinforcerWithUserId:nil withCompletion:^(NSError *theError) {
-        if (theError == nil) {
-            [blockView reloadData];
-        }
-    }];
+    [_lineChart reloadData];
+    [blockView reloadData];
     
 }
 
@@ -174,7 +164,8 @@
 }
 
 -(NSUInteger)lineChartView:(JBLineChartView *)lineChartView numberOfVerticalValuesAtLineIndex:(NSUInteger)lineIndex {
-    return [_viewModel numVerticalValuesForLine:lineIndex];
+    float verticalValue = [_viewModel numVerticalValuesForLine:lineIndex];
+    return verticalValue;
 }
 
 -(CGFloat)lineChartView:(JBLineChartView *)lineChartView verticalValueForHorizontalIndex:(NSUInteger)horizontalIndex atLineIndex:(NSUInteger)lineIndex {
@@ -192,14 +183,24 @@
 #pragma mark - Block View Delegate & Data Source
 
 -(NSInteger)numRowsInBlockView:(MAXBlockView *)theBlockView {
-    return 4;
+    return 16;
 }
 
 -(NSInteger)numColumnsInBlockView:(MAXBlockView *)theBlockView inRow:(NSUInteger)theRow {
+    
+    if (theRow % 4 == 0) {
+        return 1;
+    }
+    
     return 2;
 }
 
 -(CGFloat)heightForRow:(NSUInteger)theRow {
+    
+    if (theRow % 4 == 0) {
+        return 40.0;
+    }
+    
     return 80.0;
 }
 
@@ -208,8 +209,14 @@
 }
 
 -(void)blocksView:(MAXBlockView *)theBlockView block:(UIView *)theBlock forRow:(NSUInteger)theRow forCol:(NSUInteger)theCol {
-    [self labelTitleForColView:theBlock withString:[_viewModel stringTitleForRow:theRow col:theCol]];
-    [self labelForColView:theBlock withString:[_viewModel stringForRow:theRow col:theCol]];
+    
+    if (theRow % 4 == 0) {
+        [self labelTitleForSectionView:theBlock withString:[_viewModel stringTitleForRow:theRow col:theCol]];
+    }
+    else {
+        [self labelTitleForColView:theBlock withString:[_viewModel stringTitleForRow:theRow col:theCol]];
+        [self labelForColView:theBlock withString:[_viewModel stringForRow:theRow col:theCol]];
+    }
 }
 
 
@@ -232,6 +239,18 @@
 
 #pragma mark - Helpers For Block View
 
+-(void)labelTitleForSectionView:(UIView*)theView withString:(NSString*)theString {
+    
+    UILabel *sectionLabelTitle = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth(theView.frame) * 0.05, 0, CGRectGetWidth(theView.frame) * 0.9, CGRectGetHeight(theView.frame))];
+    sectionLabelTitle.textAlignment = NSTextAlignmentCenter;
+    sectionLabelTitle.textColor = [UIColor flatWhiteColorDark];
+    sectionLabelTitle.text = theString;
+    sectionLabelTitle.font = [UIFont openSansBoldWithSize:CGRectGetHeight(sectionLabelTitle.frame) * 0.7];
+    sectionLabelTitle.adjustsFontSizeToFitWidth = YES;
+    [theView addSubview:sectionLabelTitle];
+    
+}
+
 -(void)labelTitleForColView:(UIView*)theView withString:(NSString*)theString {
     UILabel *labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(theView.frame), CGRectGetHeight(theView.frame) * 0.2)];
     labelTitle.textAlignment = NSTextAlignmentCenter;
@@ -251,6 +270,9 @@
     label.adjustsFontSizeToFitWidth = YES;
     [theView addSubview:label];
 }
+
+
+#pragma mark - Navigation
 
 
 -(void)backButtonPressed {

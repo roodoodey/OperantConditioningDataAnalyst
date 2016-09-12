@@ -15,11 +15,23 @@
 #import "Constants.h"
 #import "UserDefaults.h"
 
+#import "MAXBehavior.h"
+#import "MAXReinforcer.h"
+#import "MAXRandomUser.h"
+
 
 @interface ReinforcementCompModel () {
+    
+    MAXOperantCondDataMan *_dataMan;
+    
     NSArray *_users;
     
-    NSMutableArray *_behaviorData;
+    NSArray *_FIUsers;
+    NSArray *_VIUsers;
+    NSArray *_FRUsers;
+    NSArray *_VRUsers;
+    
+    NSArray *_behaviorData;
     NSMutableArray *_behaviorChartData;
     
     NSMutableArray *_reinforcerData;
@@ -30,15 +42,37 @@
 
 @implementation ReinforcementCompModel
 
--(id)initWithUsers:(NSArray *)theUsers {
+-(id)initWithUsers:(NSArray *)theUsers dataMan:(MAXOperantCondDataMan *)theDataMan {
     if (self = [super init]) {
+        
+        _dataMan = theDataMan;
+        
         _users = theUsers;
         _users = [self removeExcludedUSers];
         
-        _behaviorData = [NSMutableArray array];
+        NSSortDescriptor *elapsedTimeSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"elapsedTime" ascending:YES];
         
+        _FIUsers = [theDataMan usersWithReinforcementSchedule:kFISchedule];
+        _VIUsers = [theDataMan usersWithReinforcementSchedule:kVISchedule];
+        _FRUsers = [theDataMan usersWithReinforcementSchedule:kFRSchedule];
+        _VRUsers = [theDataMan usersWithReinforcementSchedule:kVRSchedule];
         
-        _reinforcerData = [NSMutableArray array];
+        NSArray *FIBehavior = [[theDataMan behaviorOnlyForUsers:_FIUsers] sortedArrayUsingDescriptors:@[elapsedTimeSortDescriptor]];
+        NSArray *VIBehavior = [[theDataMan behaviorOnlyForUsers:_VIUsers] sortedArrayUsingDescriptors:@[elapsedTimeSortDescriptor]];
+        NSArray *FRBehavior = [[theDataMan behaviorOnlyForUsers:_FRUsers] sortedArrayUsingDescriptors:@[elapsedTimeSortDescriptor]];
+        NSArray *VRBehavior = [[theDataMan behaviorOnlyForUsers:_VRUsers] sortedArrayUsingDescriptors:@[elapsedTimeSortDescriptor]];
+        NSLog(@"FI behavior is: %@", FIBehavior);
+        _behaviorData = @[FIBehavior, VIBehavior, FRBehavior, VRBehavior];
+        
+
+        CGFloat verticalValueOne = [self verticalValueForHorizontalIndex:100 forLineIndex:1];
+        CGFloat verticalValueTwo = [self verticalValueForHorizontalIndex:120 forLineIndex:1];
+        CGFloat verticalValue200 = [self verticalValueForHorizontalIndex:200 forLineIndex:1];
+        
+        CGFloat verticalValueThree = [self verticalValueForHorizontalIndex:500 forLineIndex:1];
+        CGFloat verticalValueFour = [self verticalValueForHorizontalIndex:600 forLineIndex:1];
+        
+        NSLog(@"from 100 to 200: %f from 500 to 600: %f", verticalValue200 - verticalValueOne, verticalValueFour - verticalValueThree);
         
     }
     
@@ -70,12 +104,45 @@
 
 -(NSString*)stringTitleForRow:(NSUInteger)theRow col:(NSUInteger)theCol {
     
-    if (theRow == 0 || theRow == 1 || theRow == 2 || theRow == 3) {
+    if (theRow == 0) {
+        return @"Fixed Interval";
+    }
+    else if(theRow == 4) {
+        return @"Variable Interval";
+    }
+    else if(theRow == 8) {
+        return @"Fixed Ratio";
+    }
+    else if(theRow == 12) {
+        return @"Variable Ratio";
+    }
+    
+    int remainder = theRow % 4;
+    
+    if (remainder == 1) {
+        if (theCol == 0) {
+            return @"Avg. Time (30 sec)";
+        }
+        else if(theCol == 1) {
+            return @"Std. Time (30 sec)";
+        }
+    }
+    
+    if (remainder == 2) {
         if (theCol == 0) {
             return @"Avg. Behavior (30 sec)";
         }
         else if(theCol == 1) {
+            return @"Std. Behavior (30 sec)";
+        }
+    }
+    
+    if (remainder == 3) {
+        if (theCol == 0) {
             return @"Avg. Reinforcer (30 sec)";
+        }
+        else if(theCol == 1) {
+            return @"Std. Reinforcer (30 sec)";
         }
     }
     
@@ -84,70 +151,107 @@
 
 -(NSString*)stringForRow:(NSUInteger)theRow col:(NSUInteger)theCol {
     
-    if (theRow == 0) {
+    if (theRow == 1 || theRow == 2 || theRow == 3) {
         
-        if (theCol == 0) {
-            return [NSString stringWithFormat:@"%.02f", [self avgBehaviorForSchedule:kFISchedule forBehaviorData:_behaviorChartData] * 30.0];
+        ////// FI Schedule
+        
+        if (theRow == 2 && theCol == 0) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan avgBehaviorForUsers:_FIUsers] * 30.0];
         }
-        else if(theCol == 1) {
-            return [NSString stringWithFormat:@"%.02f", [self avgReinforcerForSchedule:kFISchedule forReinforcerData:_reinforcerChartData] * 30.0];
+        else if(theRow == 2 && theCol == 1) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevBehaviorForUsers:_FIUsers]];
+        }
+        else if(theRow == 3 && theCol == 0) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan avgReinforcerForUsers:_FIUsers] * 30.0];
+        }
+        else if(theRow == 3 && theCol == 1) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevReinforcerForUsers:_FIUsers]];
+        }
+        else if(theRow == 1 && theCol == 0) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan avgTimeForUsers:_FIUsers]];
+        }
+        else if(theRow == 1 && theCol == 1) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevTimeForUsers:_FIUsers]];
         }
         
     }
-    else if(theRow == 1) {
+    else if(theRow >= 5 && theRow <= 7) {
         
-        if (theCol == 0) {
-            return [NSString stringWithFormat:@"%.02f", [self avgBehaviorForSchedule:kVISchedule forBehaviorData:_behaviorChartData] * 30.0];
+        // VI Schedule
+        
+        if (theRow == 6 && theCol == 0) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan avgBehaviorForUsers:_VIUsers] * 30.0];
         }
-        else if(theCol == 1) {
-            return [NSString stringWithFormat:@"%.02f", [self avgReinforcerForSchedule:kVISchedule forReinforcerData:_reinforcerChartData] * 30.0];
+        else if(theRow == 6 && theCol == 1) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevBehaviorForUsers:_VIUsers]];
+        }
+        else if(theRow == 7 && theCol == 0) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan avgReinforcerForUsers:_VIUsers] * 30.0];
+        }
+        else if(theRow == 7 && theCol == 1) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevReinforcerForUsers:_VIUsers]];
+        }
+        else if(theRow == 5 && theCol == 0) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan avgTimeForUsers:_VIUsers]];
+        }
+        else if(theRow == 5 && theCol == 1) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevTimeForUsers:_VIUsers]];
+        }
+        
+        
+    }
+    else if(theRow >= 9 && theRow <= 11) {
+        
+        // FR Schedule
+        
+        if (theRow == 10 && theCol == 0) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan avgBehaviorForUsers:_FRUsers] * 30.0];
+        }
+        else if(theRow == 10 && theCol == 1) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevBehaviorForUsers:_FRUsers]];
+        }
+        else if(theRow == 11 && theCol == 0) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan avgReinforcerForUsers:_FRUsers] * 30.0];
+        }
+        else if(theRow == 11 && theCol == 1) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevReinforcerForUsers:_FRUsers]];
+        }
+        else if(theRow == 9 && theCol == 0) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan avgTimeForUsers:_FRUsers]];
+        }
+        else if(theRow == 9 && theCol == 1) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevTimeForUsers:_FRUsers]];
         }
         
     }
-    else if(theRow == 2) {
-        if (theCol == 0) {
-            return [NSString stringWithFormat:@"%.02f", [self avgBehaviorForSchedule:kFRSchedule forBehaviorData:_behaviorChartData] * 30.0];
+    else if(theRow >= 13 && theRow <= 15) {
+        
+        // FR Schedule
+        
+        if (theRow == 14 && theCol == 0) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan avgBehaviorForUsers:_VRUsers] * 30.0];
         }
-        else if(theCol == 1) {
-            return [NSString stringWithFormat:@"%.02f", [self avgReinforcerForSchedule:kFRSchedule forReinforcerData:_reinforcerChartData] * 30.0];
+        else if(theRow == 14 && theCol == 1) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevBehaviorForUsers:_VRUsers]];
         }
-    }
-    else if(theRow == 3) {
-        if (theCol == 0) {
-            return [NSString stringWithFormat:@"%.02f", [self avgBehaviorForSchedule:kVRSchedule forBehaviorData:_behaviorChartData] * 30.0];
+        else if(theRow == 15 && theCol == 0) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan avgReinforcerForUsers:_VRUsers] * 30.0];
         }
-        else if(theCol == 1) {
-            return [NSString stringWithFormat:@"%.02f", [self avgReinforcerForSchedule:kVRSchedule forReinforcerData:_reinforcerChartData] * 30.0];
+        else if(theRow == 15 && theCol == 1) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevReinforcerForUsers:_VRUsers]];
         }
+        else if(theRow == 13 && theCol == 0) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan avgTimeForUsers:_VRUsers]];
+        }
+        else if(theRow == 13 && theCol == 1) {
+            return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevTimeForUsers:_VRUsers]];
+        }
+        
     }
     
     return @"";
 }
 
-
-
--(float)avgBehaviorForSchedule:(NSUInteger)theSchedule forBehaviorData:(NSArray*)theBehaviorData {
-    float numBehaviors = 0;
-    
-    NSArray *usersForLine = [self usersForSchedule:theSchedule];
-    for (RandomUser *randomUser in usersForLine) {
-        numBehaviors += [self behaviorForUser:randomUser chartData:theBehaviorData].count / [randomUser.sessionLength floatValue];
-    }
-    
-    return numBehaviors / usersForLine.count;
-}
-
--(float)avgReinforcerForSchedule:(NSUInteger)theSchedule forReinforcerData:(NSArray*)theReinforcerData {
-    float numReinforcers = 0;
-    
-    NSArray *usersForSchedule = [self usersForSchedule:theSchedule];
-    for (RandomUser *randomUser in usersForSchedule) {
-        numReinforcers += [self reinforcerForUser:randomUser chartData:theReinforcerData].count / [randomUser.sessionLength floatValue];
-    }
-    
-    return numReinforcers / usersForSchedule.count;
-    
-}
 
 -(NSArray*)usersForSchedule:(NSUInteger)theScheduleType {
     NSMutableArray *usersForSched = [NSMutableArray array];
@@ -192,38 +296,42 @@
 #pragma mark - Chart
 
 -(NSInteger)numLines {
-    return _behaviorChartData.count;
+    return _behaviorData.count;
 }
 
 -(NSUInteger)numVerticalValuesForLine:(NSUInteger)theLineIndex {
     
-    if (theLineIndex < _behaviorChartData.count) {
-        float elapsedTimeLast = [[(Behavior*)[(NSArray*)[_behaviorChartData objectAtIndex:theLineIndex] lastObject] elapsedTime] floatValue];
+    return 600;
+    /*
+    if (theLineIndex < _behaviorData.count) {
+        NSArray *scheduleData = [_behaviorData objectAtIndex:theLineIndex];
+        MAXBehavior *behavior = [scheduleData lastObject];
+        //float elapsedTimeLast = [[(MAXBehavior*)[(NSArray*)[_behaviorData objectAtIndex:theLineIndex] lastObject] elapsedTime] floatValue];
         
-        return ceilf(elapsedTimeLast);
+        return ceilf([behavior.elapsedTime floatValue]);
         
     }
-    
+    */
     return 0;
 }
 
 -(CGFloat)verticalValueForHorizontalIndex:(NSUInteger)theHorizIndex forLineIndex:(NSUInteger)theLindeIndex {
     
-    NSArray *lineValues = [_behaviorChartData objectAtIndex:theLindeIndex];
+    NSArray *lineValues = [_behaviorData objectAtIndex:theLindeIndex];
     
     float value = 0;
     
     for (int i = 0; i < lineValues.count; i++) {
-        Behavior *behavior = [lineValues objectAtIndex:i];
+        MAXBehavior *behavior = [lineValues objectAtIndex:i];
        
         if ([behavior.elapsedTime floatValue] < theHorizIndex ) {
             value++;
         }
     }
     
-    value /= (float)[self numVerticalValuesForLine:theLindeIndex];
-    
-    return value;
+    //value /= (float)[self numVerticalValuesForLine:theLindeIndex];
+    //return value;
+    return value / [self numUsersForLineIndex:theLindeIndex];
 }
 
 -(UIColor*)colorForLineAtIndex:(NSUInteger)theLineIndex {
@@ -266,175 +374,5 @@
     return numUsers;
 }
 
-#pragma mark - Download
-
--(void)downloadBehaviorWithUserId:(NSString *)theObjectId withCompletion:(void (^)(NSError *))block {
-    [block copy];
-    
-    PFQuery *query = [Behavior query];
-    query.limit = 1000;
-    [query whereKey:@"isCorrectBehavior" equalTo:[NSNumber numberWithBool:YES]];
-    [query orderByAscending:@"objectId"];
-    [query orderByAscending:@"elapsedTime"];
-    
-    if (theObjectId != nil) {
-        [query whereKey:@"objectId" greaterThan:theObjectId];
-    }
-    
-    __weak typeof (self) wSelf = self;
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *theError) {
-
-        [_behaviorData addObjectsFromArray:objects];
-        
-        if (theError == nil && objects.count == 1000) {
-            [wSelf downloadBehaviorWithUserId:[(Behavior*)[objects lastObject] objectId] withCompletion:block];
-        }
-        else if(theError == nil) {
-            _behaviorChartData = [wSelf createBehaviorPerReinforcerTypeWithData:_behaviorData];
-            dispatch_async(dispatch_get_main_queue(), ^{
-               block(nil);
-            });
-        }
-        else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-               block(theError); 
-            });
-        }
-        
-    }];
-    
-}
-
--(void)downloadReinforcerWithUserId:(NSString *)theObjectId withCompletion:(void (^)(NSError *))block {
-    [block copy];
-    
-    PFQuery *query = [Reinforcer query];
-    query.limit = 1000;
-    [query orderByAscending:@"objectId"];
-    
-    if (theObjectId != nil) {
-        [query whereKey:@"objectId" greaterThan:theObjectId];
-    }
-    
-    __weak typeof (self) wSelf = self;
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *theError) {
-        
-        if (theError == nil && objects.count == 1000) {
-            
-            [_reinforcerData addObjectsFromArray:objects];
-            
-            [wSelf downloadReinforcerWithUserId:[(Reinforcer*)[objects lastObject] objectId] withCompletion:block];
-            
-        }
-        else if(theError == nil) {
-            
-            [_reinforcerData addObjectsFromArray:objects];
-            _reinforcerChartData = [wSelf createReinforcerPerReinforcerTypeWithData:_reinforcerData];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-               block(nil);
-            });
-            
-        }
-        else {
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-               block(theError);
-            });
-            
-        }
-        
-    }];
-    
-}
-
--(NSMutableArray*)createBehaviorPerReinforcerTypeWithData:(NSArray*)theBehaviorData {
-    
-    NSMutableArray *theDynamicBehaviorData = [NSMutableArray arrayWithArray:theBehaviorData];
-    
-    NSMutableArray *FI = [NSMutableArray array];
-    NSMutableArray *VI = [NSMutableArray array];
-    
-    NSMutableArray *FR = [NSMutableArray array];
-    NSMutableArray *VR = [NSMutableArray array];
-    
-    for (RandomUser *currentUser in _users) {
-        
-        for (int i = 0; i < theDynamicBehaviorData.count; i++) {
-            Behavior *theBehavior = [theDynamicBehaviorData objectAtIndex:i];
-            
-            if ([theBehavior.userId isEqualToString:currentUser.objectId]) {
-                
-                if ([currentUser.reinforcementSchedule intValue] == kFISchedule) {
-                    [FI addObject:theBehavior];
-                }
-                else if([currentUser.reinforcementSchedule intValue] == kVISchedule) {
-                    [VI addObject:theBehavior];
-                }
-                else if([currentUser.reinforcementSchedule intValue] == kFRSchedule) {
-                    [FR addObject:theBehavior];
-                }
-                else if([currentUser.reinforcementSchedule intValue] == kVRSchedule) {
-                    [VR addObject:theBehavior];
-                }
-                
-                [theDynamicBehaviorData removeObject:theBehavior];
-                
-            }
-        }
-        
-    }
-    
-    NSSortDescriptor *sortElapsedTime = [[NSSortDescriptor alloc] initWithKey:@"elapsedTime" ascending:YES];
-    
-    FI = [NSMutableArray arrayWithArray:[FI sortedArrayUsingDescriptors:@[sortElapsedTime]]];
-    VI = [NSMutableArray arrayWithArray:[VI sortedArrayUsingDescriptors:@[sortElapsedTime]]];
-    FR = [NSMutableArray arrayWithArray:[FR sortedArrayUsingDescriptors:@[sortElapsedTime]]];
-    VR = [NSMutableArray arrayWithArray:[VR sortedArrayUsingDescriptors:@[sortElapsedTime]]];
-    
-    
-    return [NSMutableArray arrayWithObjects:FI, VI, FR, VR, nil];
-}
-
--(NSMutableArray*)createReinforcerPerReinforcerTypeWithData:(NSArray*)theBehaviorData {
-    
-    NSMutableArray *tmpReinforcerData = [NSMutableArray arrayWithArray:theBehaviorData];
-    
-    NSMutableArray *FI = [NSMutableArray array];
-    NSMutableArray *VI = [NSMutableArray array];
-    NSMutableArray *FR = [NSMutableArray array];
-    NSMutableArray *VR = [NSMutableArray array];
-    
-    for (RandomUser *user in _users) {
-        
-        for (int i = 0; i < tmpReinforcerData.count; i++) {
-            
-            Reinforcer *theReinfocer = [tmpReinforcerData objectAtIndex:i];
-            
-            if ([theReinfocer.userId isEqualToString:user.objectId]) {
-                
-                if ([user.reinforcementSchedule intValue] == kFISchedule) {
-                    [FI addObject:theReinfocer];
-                }
-                else if([user.reinforcementSchedule intValue] == kVISchedule) {
-                    [VI addObject:theReinfocer];
-                }
-                else if([user.reinforcementSchedule intValue] == kFRSchedule) {
-                    [FR addObject:theReinfocer];
-                }
-                else if([user.reinforcementSchedule intValue] == kVRSchedule) {
-                    [VR addObject:theReinfocer];
-                }
-                
-                [tmpReinforcerData removeObject:theReinfocer];
-            }
-            
-        }
-        
-    }
-    
-    return [NSMutableArray arrayWithObjects:FI, VI, FR, VR, nil];
-    
-}
 
 @end
