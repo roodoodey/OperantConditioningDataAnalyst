@@ -149,9 +149,9 @@
     
     for (MAXRandomUser *user in theUsers) {
         
-        NSArray *reinforcersForCurrentUser = [self behaviorOnlyForUsers:@[user]];
+        NSArray *reinforcersForCurrentUser = [self reinforcerForUsersByUsers:@[user]];
         NSArray *reinforcers = [reinforcersForCurrentUser objectAtIndex:0];
-        [array addObject:reinforcers];
+        [array addObjectsFromArray: reinforcers];
         
     }
     
@@ -174,13 +174,13 @@
 
 -(float)avgReinforcerForUsers:(NSArray *)theUsers {
     
-    float amountOfREinforcers = 0;
+    float amountOfReinforcers = 0;
     for (MAXRandomUser *user in theUsers) {
         NSArray *reinforcers = [[self reinforcerForUsersByUsers:@[user]] objectAtIndex:0];
-        amountOfREinforcers += reinforcers.count / [user.sessionLength floatValue];
+        amountOfReinforcers += reinforcers.count / [user.sessionLength floatValue];
     }
     
-    return amountOfREinforcers / theUsers.count;
+    return amountOfReinforcers / theUsers.count;
 }
 
 -(float)avgTimeForUsers:(NSArray *)theUsers {
@@ -193,24 +193,6 @@
 }
 
 -(float)stdDevBehaviorForUsers:(NSArray *)theUsers {
-    /*
-    NSArray *behaviorForUsers = [self behaviorOnlyForUsers:theUsers];
-    // multiplied by 30 because the interval is 30 seconds
-    float averageBehavior = [self avgBehaviorForUsers:theUsers] * 30;
-    */
-    /*
-    float meanVariance = 0;
-    
-    // interval is 30 seconds and max play time is 600 seconds, hence 20 loops
-    for (int i = 0; i < 20; i++) {
-        
-        NSRange range = NSMakeRange(i*30, 30);
-        // have to devide by the number of users
-        int numBehaviorsInRange = [self numBehaviors:behaviorForUsers inRange:range] / theUsers.count;
-        meanVariance += pow(numBehaviorsInRange - averageBehavior, 2);
-        
-    }
-     */
     
     float totalStdDev = 0;
     
@@ -220,16 +202,17 @@
         
         NSArray *behaviorForUser = [self behaviorOnlyForUsers: @[currentUser] ];
         float averageBehavior = [self avgBehaviorForUsers: @[currentUser] ];
+        int sessionLength = [currentUser.sessionLength intValue];
         
-        for (int i = 0; i < [currentUser.sessionLength intValue]; i += 1) {
+        for (int i = 0; i < sessionLength; i += 1) {
             
             NSRange range = NSMakeRange(i, 1);
             int numBehaviorsInRange = [self numBehaviors:behaviorForUser inRange:range];
-            //NSLog(@"num behaviors in range: %d", numBehaviorsInRange);
+
             meanVariance += powf(numBehaviorsInRange - averageBehavior, 2);
         }
-        //NSLog(@"mean variance is: %f", meanVariance);
-        totalStdDev += sqrtf(meanVariance / [currentUser.sessionLength intValue]);
+
+        totalStdDev += sqrtf(meanVariance / (double)sessionLength);
         
         NSLog(@"the average behavior: %f", averageBehavior);
         NSLog(@"std dev: %f", totalStdDev);
@@ -243,23 +226,33 @@
 
 -(float)stdDevReinforcerForUsers:(NSArray *)theUsers {
     
-    NSArray *reinforcerForUsers = [self reinforcerOnlyForUsers:theUsers];
-    // multiplied by 30 because the interval is 30 seconds
-    float averageReinforcer = [self avgReinforcerForUsers:theUsers] * 30;
+    float totalStdDev = 0;
     
-    float meanVariance = 0;
-    
-    for (int i = 0; i < 20; i++) {
+    for (MAXRandomUser *currentUser in theUsers) {
         
-        NSRange range = NSMakeRange(i * 30, 30);
-        // have to devide by the number of users
-        int numReinforcersInRange = [self numReinforcers:reinforcerForUsers inRange:range];
-        meanVariance += pow(numReinforcersInRange - averageReinforcer, 2);
+        float meanVariance = 0;
+        
+        NSArray <MAXReinforcer *> *reinforcersForUser = [self reinforcerOnlyForUsers: @[currentUser]];
+        float averageReinforcer = [self avgReinforcerForUsers: @[currentUser]];
+        int sessionLength = [currentUser.sessionLength intValue];
+        
+        for (int i = 0; i < sessionLength; i++) {
+            
+            NSRange range = NSMakeRange(i, 1);
+            int numReinforcersInRange = [self numReinforcers: reinforcersForUser inRange: range];
+            
+            meanVariance += pow(numReinforcersInRange - averageReinforcer, 2);
+            
+        }
+        
+        totalStdDev += sqrt(meanVariance / (double)sessionLength);
         
     }
     
-    float stdDev = sqrtf(meanVariance / 20.0f);
+    float stdDev = totalStdDev / (double)theUsers.count;
+    
     return stdDev;
+    
 }
 
 -(float)stdDevTimeForUsers:(NSArray *)theUsers {

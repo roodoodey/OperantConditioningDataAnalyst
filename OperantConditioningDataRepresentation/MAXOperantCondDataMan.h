@@ -11,6 +11,7 @@
 
 @class MAXBehavior;
 @class MAXReinforcer;
+@class MAXRandomUser;
 
 @interface MAXOperantCondDataMan : NSObject
 
@@ -27,7 +28,7 @@
 #pragma mark - Data Getters
 
 
--(NSArray*)usersWithReinforcementSchedule:(ReinforcementSchedule)theReinforcementSchedule;
+-(NSArray <MAXRandomUser *> *)usersWithReinforcementSchedule:(ReinforcementSchedule)theReinforcementSchedule;
 
 
 -(NSArray <NSArray <MAXBehavior *> *> *)behaviorForUsersByUser:(NSArray*)theUsers;
@@ -35,10 +36,11 @@
 
 
 -(NSArray <MAXBehavior *> *)behaviorOnlyForUsers:(NSArray*)theUsers;
--(NSArray*)reinforcerOnlyForUsers:(NSArray*)theUsers;
+-(NSArray <MAXReinforcer *> *)reinforcerOnlyForUsers:(NSArray*)theUsers;
 
 
 #pragma mark - Data Information
+
 
 -(float)avgBehaviorForUsers:(NSArray*)theUsers;
 -(float)avgReinforcerForUsers:(NSArray*)theUsers;

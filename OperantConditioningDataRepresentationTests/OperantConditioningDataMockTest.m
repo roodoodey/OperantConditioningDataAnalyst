@@ -35,20 +35,20 @@ static MAXOperantCondDataMan *_dataMan;
 
 -(void)testDataMan {
     
-    XCTAssertTrue(_dataMan.allUsers.count == 3);
-    XCTAssertTrue(_dataMan.users.count == 3);
-    XCTAssertTrue(_dataMan.behavior.count == 93);
-    XCTAssertTrue(_dataMan.correctBehavior.count == 90);
+    XCTAssertTrue(_dataMan.allUsers.count == 4);
+    XCTAssertTrue(_dataMan.users.count == 4);
+    XCTAssertTrue(_dataMan.behavior.count == 113);
+    XCTAssertTrue(_dataMan.correctBehavior.count == 110);
     
 }
 
 -(void)testFISchedule {
     
-    NSArray *FIUsers = [_dataMan usersWithReinforcementSchedule:kFISchedule];
+    NSArray *FIUsers = [_dataMan usersWithReinforcementSchedule: kFISchedule];
     
     XCTAssertTrue(FIUsers.count == 2);
     
-    NSArray *FIBehaviors = [_dataMan behaviorForUsersByUser:FIUsers];
+    NSArray *FIBehaviors = [_dataMan behaviorForUsersByUser: FIUsers];
     XCTAssertTrue(FIBehaviors.count == 2);
     
     [self validateUsersBehaviorArray:FIBehaviors users:FIUsers];
@@ -79,11 +79,11 @@ static MAXOperantCondDataMan *_dataMan;
 
 -(void)testVISchedule {
     
-    NSArray *VIUsers = [_dataMan usersWithReinforcementSchedule:kVISchedule];
+    NSArray *VIUsers = [_dataMan usersWithReinforcementSchedule: kVISchedule];
     
     XCTAssertTrue(VIUsers.count == 1);
     
-    NSArray *VIBehavior = [_dataMan behaviorForUsersByUser:VIUsers];
+    NSArray *VIBehavior = [_dataMan behaviorForUsersByUser: VIUsers];
     NSArray *behaviorsUserOne = [VIBehavior objectAtIndex:0];
     XCTAssertTrue(behaviorsUserOne.count == 30);
     
@@ -102,6 +102,47 @@ static MAXOperantCondDataMan *_dataMan;
     
 }
 
+// tests standard dev and average behavior
+-(void)testFRSchedule {
+    
+    NSArray <MAXRandomUser *> *FRUsers = [_dataMan usersWithReinforcementSchedule: kFRSchedule];
+    [FRUsers firstObject].sessionLength = [NSNumber numberWithDouble: 10.0];
+    
+    XCTAssertTrue(FRUsers.count == 1);
+    
+    
+    // behavior avg and std dev test
+    NSArray <NSArray <MAXBehavior *> *> *FRBehavior = [_dataMan behaviorForUsersByUser: FRUsers];
+    
+    XCTAssertTrue(FRBehavior.firstObject.count == 20);
+    
+    [self validateUsersBehaviorArray:FRBehavior users: FRUsers];
+    
+    float avgBehavior = [_dataMan avgBehaviorForUsers: FRUsers];
+    XCTAssertTrue(avgBehavior == 2.0);
+    
+    float stdDevBehavior = [_dataMan stdDevBehaviorForUsers: FRUsers];
+    NSString *stdDevBehaviorString = [NSString stringWithFormat:@"%.4f", stdDevBehavior];
+    
+    XCTAssertTrue([stdDevBehaviorString isEqualToString:@"1.0954"] == YES);
+    
+    
+    // reinforcer avg and std dev test
+    NSArray <NSArray <MAXReinforcer *> *> *FRReinforcer = [_dataMan reinforcerForUsersByUsers: FRUsers];
+    
+    XCTAssertTrue(FRReinforcer.firstObject.count == 4);
+    
+    float avgReinforcer = [_dataMan avgReinforcerForUsers: FRUsers];
+    NSString *avgReinforcerStirng = [NSString stringWithFormat:@"%.4f", avgReinforcer];
+    XCTAssertTrue([avgReinforcerStirng isEqualToString:@"0.4000"] == YES);
+    
+    [self validateUsersReinforcerArray: FRReinforcer users: FRUsers];
+    
+    float stdDevReinforcer = [_dataMan stdDevReinforcerForUsers: FRUsers];
+    NSString *stdDevReinforcerString = [NSString stringWithFormat:@"%.4f", stdDevReinforcer];
+    XCTAssertTrue([stdDevReinforcerString isEqualToString: @"0.6633"] == YES);
+    
+}
 
 #pragma mark - Helpers
 
