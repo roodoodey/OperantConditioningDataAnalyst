@@ -84,13 +84,12 @@ const int maxTimePlayed = 610;
         minutes = [NSString stringWithFormat:@"%d", (int)[self sessionLenghtMinutes]];
     }
     
-    NSLog(@"seconds are: %@", seconds);
     
     return [NSString stringWithFormat:@"%@ : %@", minutes, seconds];
 }
 
 -(NSString*)avgBehavior {
-    NSLog(@"average behavior is: %.02f", [self averageBehavior30Sec]);
+
     return [NSString stringWithFormat:@"%.02f", [_dataMan avgBehaviorForUsers: @[_randomUser]]];
 }
 
@@ -160,13 +159,13 @@ const int maxTimePlayed = 610;
 }
 
 -(NSString*)maxXValue {
+    
     return [NSString stringWithFormat:@"%d", 610];
-    //return [NSString stringWithFormat:@"%d", (int)ceil([_randomUser.sessionLength doubleValue])];
 }
 
 -(NSString*)maxYValue {
+    
     return [NSString stringWithFormat:@"%d", 1100];
-    //return [NSString stringWithFormat:@"%d", (int)[_behaviorArray count]];
 }
 
 -(BOOL)sessionLengthIncorrect {
@@ -200,63 +199,13 @@ const int maxTimePlayed = 610;
 
 -(NSInteger)sessionLenghtMinutes {
     int minutes = [_randomUser.sessionLength intValue] / 60;
-    NSLog(@"minutes are: %d", minutes);
+
     return minutes;
 }
 
 -(NSInteger)sessionLengthSeconds {
     int seconds = [_randomUser.sessionLength intValue] % 60;
     return seconds;
-}
-
--(float)averageBehavior30Sec {
-
-    return [self averageBehvavior] * 30;
-}
-
--(float)averageBehvavior {
-    double averagePerSecond = (double) _behaviorArray.count / [_randomUser.sessionLength doubleValue];
-    return averagePerSecond;
-}
-
--(float)standardDeviationBehavior30Sec {
-    
-    return [self standardDeviationBehavior] * 30;
-}
-
--(float)standardDeviationBehavior {
-    
-    return 0;
-    
-    
-}
-
--(float)averageReinforcer {
-    double averagePerSecond = (double) _reinforcerArray.count / [_randomUser.sessionLength doubleValue];
-    return averagePerSecond * 30;
-}
-
--(float)standardDeviationReinforcer {
-    
-    float sum = 0;
-    float avgReinforcer = [self averageReinforcer];
-    
-    for (int i = 0; i < _reinforcerChartData.count; i++) {
-        
-        int numToDeduct = 0;
-        if (i != 0) {
-            numToDeduct = [(NSNumber*)[_reinforcerChartData objectAtIndex:i - 1] intValue];
-        }
-        
-        int currentNum = [(NSNumber*)[_reinforcerChartData objectAtIndex:i] intValue] - numToDeduct;
-        
-        sum += pow(currentNum - avgReinforcer, 2);
-    }
-    
-    sum = sum / (float)_reinforcerChartData.count;
-    sum = sqrtf(sum);
-    
-    return sum * 30;
 }
 
 #pragma mark - Downlaod and data creation
@@ -307,7 +256,7 @@ const int maxTimePlayed = 610;
 
 -(NSUInteger)numberOfVerticalValuesAtIndes:(NSUInteger)lineIndex {
     NSLog(@"chart data count: %d", (int)_behaviorChartData.count);
-    //return maxTimePlayed;
+
     return 610;
 }
 
