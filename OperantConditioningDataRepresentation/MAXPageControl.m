@@ -249,7 +249,7 @@ const float p_defaultIndicatorSpace = 8;
  */
 -(void)p_populateIndicators:(NSMutableArray*)theIndicators numberOfIndicators:(NSInteger)theNumberOfIndiactors {
     
-    int numIndicatorsToAdd = theNumberOfIndiactors - theIndicators.count;
+    NSInteger numIndicatorsToAdd = theNumberOfIndiactors - theIndicators.count;
     
     for (int i = 0; i < numIndicatorsToAdd; i++) {
         

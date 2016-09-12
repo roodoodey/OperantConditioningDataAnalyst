@@ -9,15 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <Parse/Parse.h>
 
-@class  RandomUser;
+@class MAXRandomUser;
 
 @interface UserDetailViewModel : NSObject
 
--(id)initWithUser:(RandomUser*)theRandomUser;
-
--(void)downloadBehaviorWithCompletion:(void (^)(NSError *error))block;
--(void)downloadReinforcersWithCompletion:(void (^)(NSError *error))block;
--(void)downloadBehaviorAndReinforcersWithCompletion:(void (^)(NSError *error))block;
+-(id)initWithUser:(MAXRandomUser *)theRandomUser;
 
 -(NSString *)userId;
 -(NSString *)sessionLength;

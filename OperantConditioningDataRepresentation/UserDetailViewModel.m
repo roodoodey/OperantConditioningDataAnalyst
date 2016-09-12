@@ -7,18 +7,24 @@
 //
 
 #import "UserDetailViewModel.h"
-#import "Behavior.h"
-#import "Reinforcer.h"
-#import "RandomUser.h"
+#import "MAXReinforcer.h"
+#import "MAXBehavior.h"
+#import "MAXRandomUser.h"
 #import "UserDefaults.h"
 #import "Constants.h"
 
+#import "MAXOperantCondDataMan.h"
+
 @interface UserDetailViewModel () {
-    RandomUser *_randomUser;
-    NSMutableArray *_behaviorArray;
-    NSArray *_reinforerArray;
-    NSMutableArray *_behaviorChartData;
-    NSArray *_reinforcerChartData;
+    
+    MAXOperantCondDataMan *_dataMan;
+    
+    MAXRandomUser *_randomUser;
+    
+    NSArray <MAXBehavior *> *_behaviorArray;
+    NSArray <MAXReinforcer *> *_reinforcerArray;
+    NSArray <NSNumber *> *_behaviorChartData;
+    NSArray <NSNumber *> *_reinforcerChartData;
 }
 
 @end
@@ -27,12 +33,25 @@ const int maxTimePlayed = 610;
 
 @implementation UserDetailViewModel
 
--(id)initWithUser:(RandomUser *)theRandomUser {
+-(id)initWithUser:(MAXRandomUser *)theRandomUser {
+    
     if (self = [super init]) {
+        
         _randomUser = theRandomUser;
         _behaviorArray = [NSMutableArray array];
         _behaviorChartData = [NSMutableArray array];
-        _reinforerArray = [NSArray array];
+        _reinforcerArray = [NSArray array];
+        
+        _dataMan = [[MAXOperantCondDataMan alloc] init];
+        
+        _behaviorArray = [_dataMan behaviorOnlyForUsers: @[theRandomUser] ];
+        _behaviorArray = [_behaviorArray sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"elapsedTime" ascending: YES]]];
+        _behaviorChartData = [self constructDataWithBehaviorArray: _behaviorArray];
+        
+        _reinforcerArray = [_dataMan reinforcerOnlyForUsers: @[theRandomUser]];
+        _reinforcerArray = [_reinforcerArray sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"elapsedTime" ascending: YES]]];
+        _reinforcerChartData = [self constructDataWithReinforcerArray: _reinforcerArray];
+        
     }
     
     return self;
@@ -72,19 +91,19 @@ const int maxTimePlayed = 610;
 
 -(NSString*)avgBehavior {
     NSLog(@"average behavior is: %.02f", [self averageBehavior30Sec]);
-    return [NSString stringWithFormat:@"%.02f", [self averageBehavior30Sec]];
+    return [NSString stringWithFormat:@"%.02f", [_dataMan avgBehaviorForUsers: @[_randomUser]]];
 }
 
 -(NSString*)stdDevBehavior {
-    return [NSString stringWithFormat:@"%.02f", [self standardDeviationBehavior30Sec]];
+    return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevBehaviorForUsers: @[_randomUser]]];
 }
 
 -(NSString*)avgReinforcer {
-    return [NSString stringWithFormat:@"%.02f", [self averageReinforcer]];
+    return [NSString stringWithFormat:@"%.02f", [_dataMan avgReinforcerForUsers: @[_randomUser]]];
 }
 
 -(NSString*)stdDevReinforcer {
-    return [NSString stringWithFormat:@"%.02f", [self standardDeviationReinforcer]];
+    return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevReinforcerForUsers: @[_randomUser]]];
 }
 
 -(NSString *)userGender {
@@ -209,21 +228,11 @@ const int maxTimePlayed = 610;
     
     return 0;
     
-    float sumOfVariance = 0;
-    
-    for (NSNumber *numBehaviorsAtTime in _behaviorChartData) {
-        sumOfVariance += pow([numBehaviorsAtTime doubleValue] - [self averageBehvavior], 2);
-    }
-    
-    sumOfVariance = sumOfVariance / (float)_behaviorChartData.count;
-    sumOfVariance = sqrtf(sumOfVariance);
-    
-    return sumOfVariance;
     
 }
 
 -(float)averageReinforcer {
-    double averagePerSecond = (double) _reinforerArray.count / [_randomUser.sessionLength doubleValue];
+    double averagePerSecond = (double) _reinforcerArray.count / [_randomUser.sessionLength doubleValue];
     return averagePerSecond * 30;
 }
 
@@ -252,114 +261,14 @@ const int maxTimePlayed = 610;
 
 #pragma mark - Downlaod and data creation
 
--(void)downloadReinforcersWithCompletion:(void (^)(NSError *))block {
-    [block copy];
-    
-    PFQuery *query = [Reinforcer query];
-    query.limit = 1000;
-    [query whereKey:@"userId" equalTo:_randomUser.objectId];
-    
-    __weak typeof (self) wSelf = self;
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-       
-        if (error == nil) {
-            NSLog(@"objects are: %@", objects);
-            _reinforerArray = objects;
-            _reinforcerChartData = [wSelf constructDataWithReinforcerArray:_reinforerArray];
-            block(nil);
-        }
-        else {
-            block(error);
-        }
-        
-    }];
-}
 
--(void)downloadBehaviorSKipping:(NSInteger)itemsToSkip withCompletion:(void (^)(NSError *error))block {
-    [block copy];
-    
-    
-    
-    PFQuery *query = [Behavior query];
-    query.limit = 1000;
-    query.skip = itemsToSkip;
-    [query whereKey:@"userId" equalTo:_randomUser.objectId];
-    [query whereKey:@"isCorrectBehavior" equalTo:[NSNumber numberWithBool:YES]];
-    
-    __weak typeof (self) wSelf = self;
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-           
-            if (error == nil) {
-                NSLog(@"objects are: %@", objects);
-                 [_behaviorArray addObjectsFromArray:objects];
-                _behaviorChartData = [NSMutableArray arrayWithArray:[self constructDataWithBehaviorArray:_behaviorArray]];
-                if (objects.count != 1000) {
-                    block(nil);
-                }
-                else {
-                    [wSelf downloadBehaviorSKipping:itemsToSkip + 1000 withCompletion:block];
-                }
-            }
-            else {
-                block(error);
-            }
-            
-        });
-    }];
-}
-
--(void)downloadBehaviorAndReinforcersWithCompletion:(void (^)(NSError *))block {
-    [block copy];
-    
-    __block BOOL allDownloaded = NO;
-    __block NSError *tmpError;
-    
-    [self downloadBehaviorSKipping:0 withCompletion:^(NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (allDownloaded) {
-                if (tmpError) {
-                    block(tmpError);
-                }
-                else {
-                    block(error);
-                }
-            }
-            else {
-                tmpError = error;
-                allDownloaded = YES;
-            }
-        });
-    }];
-    
-    [self downloadReinforcersWithCompletion:^(NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (allDownloaded) {
-                if (tmpError) {
-                    block(tmpError);
-                }
-                else {
-                    block(error);
-                }
-            }
-            else {
-                tmpError = error;
-                allDownloaded = YES;
-            }
-        });
-    }];
-}
-
--(NSArray*)constructDataWithBehaviorArray:(NSArray*)array {
+-(NSArray <NSNumber *> *)constructDataWithBehaviorArray:(NSArray*)array {
     NSMutableArray *tmpArray = [NSMutableArray array];
-    
-    NSLog(@"session length is: %f", ceil([_randomUser.sessionLength doubleValue]));
     
     for (int i = 0; i <= ceil([_randomUser.sessionLength doubleValue]); i++) {
         
         int numBehaviorsForTime = 0;
-        for (Behavior *currentBehavior in array) {
+        for (MAXBehavior *currentBehavior in array) {
             if ([currentBehavior.elapsedTime floatValue] < i && [currentBehavior.isCorrectBehavior boolValue] == YES) {
                 numBehaviorsForTime++;
             }
@@ -371,13 +280,13 @@ const int maxTimePlayed = 610;
     return tmpArray;
 }
 
--(NSArray*)constructDataWithReinforcerArray:(NSArray *)array {
+-(NSArray <NSNumber *> *)constructDataWithReinforcerArray:(NSArray *)array {
     NSMutableArray *tmpArray = [NSMutableArray array];
     
     for (int i = 0; i < ceilf([_randomUser.sessionLength doubleValue]); i++) {
         
         int numReinforcersForTime = 0;
-        for (Reinforcer *currentReinforcer in array) {
+        for (MAXReinforcer *currentReinforcer in array) {
             if ([currentReinforcer.elapsedTime floatValue] < i) {
                 numReinforcersForTime++;
             }
@@ -403,7 +312,6 @@ const int maxTimePlayed = 610;
 }
 
 -(CGFloat)verticalValueForHorizontalIndex:(NSUInteger)horizontalIndex {
-    //NSLog(@"vertical value at index: %d, value: %d", (int)horizontalIndex, (int)[(NSNumber*)[_behaviorChartData objectAtIndex:horizontalIndex] intValue]);
     
     if (horizontalIndex >= _behaviorChartData.count) {
         return [[NSNumber numberWithFloat:NAN] floatValue];
@@ -418,12 +326,14 @@ const int maxTimePlayed = 610;
 
 -(NSInteger)numberOfReinforcers {
     
-    return _reinforerArray.count;
+    return _reinforcerArray.count;
 }
 
 -(double)horizontalValueForReinforcerAtIndex:(NSUInteger)theIndex {
     
-    return [[(Reinforcer *)[_reinforerArray objectAtIndex: theIndex] elapsedTime] doubleValue];
+    double elapsedTime = [[(MAXReinforcer *)[_reinforcerArray objectAtIndex: theIndex] elapsedTime] doubleValue];
+    
+    return elapsedTime;
 }
 
 @end

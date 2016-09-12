@@ -16,7 +16,9 @@
 #import "MAXPagingScrollView.h"
 #import "MAXLineChartView.h"
 
+
 @interface UserDetailViewController () <JBLineChartViewDataSource, JBLineChartViewDelegate, MAXLineChartDelegate, MAXLineChartDataSource> {
+    
     JBLineChartView *lineChart;
     MAXLineChartView *_cumulativeLineChart;
     UserDetailViewModel *_viewModel;
@@ -25,7 +27,9 @@
     UILabel *maxYValueLabel;
     UILabel *userGenderLabel, *userPlayFreq, *userPlayAmount;
     UIView *includeOrExcludeView;
+    
     UIScrollView *_scrollView;
+    
 }
 
 @end
@@ -87,32 +91,15 @@
     
     [self.view addSubview: pageView];
     
-    MBProgressHUD *progressIndic = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    progressIndic.mode = MBProgressHUDModeIndeterminate;
     
-    __weak typeof(self) wSelf = self;
+    [lineChart reloadData];
+    [_cumulativeLineChart reloadData];
     
-    [_viewModel downloadBehaviorAndReinforcersWithCompletion:^(NSError *error) {
-        
-        if (!error) {
-            
-            [lineChart reloadData];
-            [_cumulativeLineChart reloadData];
-            
-            _cumulativeLineChart.layer.transform = CATransform3DMakeRotation(M_PI_2, 0, 0, 1.0);
-            _cumulativeLineChart.frame = CGRectMake(0, 0, CGRectGetWidth(_cumulativeLineChart.frame), CGRectGetHeight(_cumulativeLineChart.frame));
-            [pageView reloadDataBlocks];
-            
-            [wSelf updateData];
-        }
-        else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
-            [alert show];
-        }
-        
-        [progressIndic hide:YES];
-        
-    }];
+    _cumulativeLineChart.layer.transform = CATransform3DMakeRotation(M_PI_2, 0, 0, 1.0);
+    _cumulativeLineChart.frame = CGRectMake(0, 0, CGRectGetWidth(_cumulativeLineChart.frame), CGRectGetHeight(_cumulativeLineChart.frame));
+    [pageView reloadDataBlocks];
+    
+    [self updateData];
     
 }
 

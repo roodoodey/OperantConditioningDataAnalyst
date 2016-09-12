@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class RandomUser;
+@class MAXRandomUser;
 
 @interface UserDetailViewController : UIViewController
 
-@property (nonatomic, strong) RandomUser *randomUser;
+@property (nonatomic, strong) MAXRandomUser *randomUser;
 
 @end

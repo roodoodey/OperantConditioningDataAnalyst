@@ -377,8 +377,10 @@
             int lowPosX = floor(posX);
             int highPosX = ceil(posX);
             
-            double lowPosY = [[lineData objectAtIndex: lowPosX] doubleValue] / [self p_highestYValueForChart];
-            double highPosY = [[lineData objectAtIndex: highPosX] doubleValue] / [self p_highestYValueForChart];
+            double highestYValueForChart = [self p_highestYValueForChart];
+            
+            double lowPosY = [[lineData objectAtIndex: lowPosX] doubleValue] / highestYValueForChart;
+            double highPosY = [[lineData objectAtIndex: highPosX] doubleValue] / highestYValueForChart;
             
             double slopeHeight = /* dstance x*/ (posX - lowPosX) * /* slope */ (highPosY - lowPosY) * [self p_chartHeight];
             double lowPosYViewCoord = (1 - lowPosY) * [self p_chartHeight];

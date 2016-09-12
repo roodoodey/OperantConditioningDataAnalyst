@@ -133,7 +133,7 @@
     
     NSMutableArray *theViews = [NSMutableArray array];
     
-    int numColumns = [self.datasource numColumnsInBlockView:self inRow:theRow];
+    NSInteger numColumns = [self.datasource numColumnsInBlockView:self inRow:theRow];
     
     float separatorWidth = [self.delegate widthForVerticalSeparatorForRow:theRow];
     
