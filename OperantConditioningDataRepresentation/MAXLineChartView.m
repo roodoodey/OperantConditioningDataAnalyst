@@ -350,7 +350,7 @@
 
 -(void)p_drawLineDecorationViewsWithChartData:(NSArray <NSArray <NSNumber *> *> *)theChartData {
     
-    if ([self.datasource respondsToSelector:@selector(MAXLineChart:numDecorationViewsForLine:)] == YES || [self.datasource respondsToSelector:@selector(MAXLineChart:xValueForDecorationViewForLine:atIndex:)] == YES || [self.datasource respondsToSelector:@selector(MAXLineChart:decorationViewForLine:atIndex:decorationViewPosition:)] == YES) {
+    if ([self.datasource respondsToSelector:@selector(MAXLineChart:numDecorationViewsForLine:)] == YES && [self.datasource respondsToSelector:@selector(MAXLineChart:xValueForDecorationViewForLine:atIndex:)] == YES && [self.datasource respondsToSelector:@selector(MAXLineChart:decorationViewForLine:atIndex:decorationViewPosition:)] == YES) {
         
         [self p_removeLineDecorationViews];
         _lineDecorationViews = [self p_fetchAndDrawLineDecorationViewsWithChartData: theChartData];
