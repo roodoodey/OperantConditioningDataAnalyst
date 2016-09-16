@@ -1,0 +1,52 @@
+{ "results": [
+              {
+              "createdAt": "2015-05-28T09:34:11.756Z",
+              "elapsedTime": 12.0,
+              "isCorrectBehavior": true,
+              "objectId": "3",
+              "updatedAt": "2015-05-28T09:34:11.756Z",
+              "userId": "1"
+              },{
+              "createdAt": "2015-05-28T09:34:11.756Z",
+              "elapsedTime": 24.0,
+              "isCorrectBehavior": true,
+              "objectId": "3",
+              "updatedAt": "2015-05-28T09:34:11.756Z",
+              "userId": "1"
+              },{
+              "createdAt": "2015-05-28T09:34:11.756Z",
+              "elapsedTime": 33.0,
+              "isCorrectBehavior": true,
+              "objectId": "3",
+              "updatedAt": "2015-05-28T09:34:11.756Z",
+              "userId": "1"
+              },{
+              "createdAt": "2015-05-28T09:34:11.756Z",
+              "elapsedTime": 43.0,
+              "isCorrectBehavior": true,
+              "objectId": "3",
+              "updatedAt": "2015-05-28T09:34:11.756Z",
+              "userId": "1"
+              },{
+              "createdAt": "2015-05-28T09:34:11.756Z",
+              "elapsedTime": 11.0,
+              "isCorrectBehavior": true,
+              "objectId": "3",
+              "updatedAt": "2015-05-28T09:34:11.756Z",
+              "userId": "2"
+              },{
+              "createdAt": "2015-05-28T09:34:11.756Z",
+              "elapsedTime": 23.0,
+              "isCorrectBehavior": true,
+              "objectId": "3",
+              "updatedAt": "2015-05-28T09:34:11.756Z",
+              "userId": "2"
+              },{
+              "createdAt": "2015-05-28T09:34:11.756Z",
+              "elapsedTime": 32.0,
+              "isCorrectBehavior": true,
+              "objectId": "3",
+              "updatedAt": "2015-05-28T09:34:11.756Z",
+              "userId": "2"
+              }
+]}

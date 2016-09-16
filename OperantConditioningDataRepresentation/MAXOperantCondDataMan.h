@@ -29,7 +29,7 @@
 
 
 -(NSArray <MAXRandomUser *> *)usersWithReinforcementSchedule:(ReinforcementSchedule)theReinforcementSchedule;
-
+-(NSArray <MAXRandomUser *> *)usersWithIds:(NSArray <NSString *> *)theIds;
 
 -(NSArray <NSArray <MAXBehavior *> *> *)behaviorForUsersByUser:(NSArray*)theUsers;
 -(NSArray <NSArray <MAXReinforcer *> *> *)reinforcerForUsersByUsers:(NSArray*)theUsers;
@@ -41,6 +41,10 @@
 
 #pragma mark - Data Information
 
+-(double)avgPostreinforcementTimeForUsers:(NSArray *)theUsers;
+-(double)stdDevPostreinforcementTimeForUsers:(NSArray *)theUsers;
+-(double)avgMinPostreinforcementTimeForUsers:(NSArray *)theUsers;
+-(double)avgMaxPostreinforcementTimeForUsers:(NSArray *)theUsers;
 
 -(float)avgBehaviorForUsers:(NSArray*)theUsers;
 -(float)avgReinforcerForUsers:(NSArray*)theUsers;

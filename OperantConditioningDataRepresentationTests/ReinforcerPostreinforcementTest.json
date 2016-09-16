@@ -1,0 +1,45 @@
+{ "results": [
+              {
+              "createdAt": "2015-05-28T10:40:11.124Z",
+              "elapsedTime": 10.0,
+              "objectId": "01AdtrRQrT",
+              "updatedAt": "2015-05-28T10:40:11.124Z",
+              "userId": "1"
+              },{
+              "createdAt": "2015-05-28T10:40:11.124Z",
+              "elapsedTime": 20.0,
+              "objectId": "01AdtrRQrT",
+              "updatedAt": "2015-05-28T10:40:11.124Z",
+              "userId": "1"
+              },{
+              "createdAt": "2015-05-28T10:40:11.124Z",
+              "elapsedTime": 30.0,
+              "objectId": "01AdtrRQrT",
+              "updatedAt": "2015-05-28T10:40:11.124Z",
+              "userId": "1"
+              },{
+              "createdAt": "2015-05-28T10:40:11.124Z",
+              "elapsedTime": 40.0,
+              "objectId": "01AdtrRQrT",
+              "updatedAt": "2015-05-28T10:40:11.124Z",
+              "userId": "1"
+              },{
+              "createdAt": "2015-05-28T10:40:11.124Z",
+              "elapsedTime": 10.0,
+              "objectId": "01AdtrRQrT",
+              "updatedAt": "2015-05-28T10:40:11.124Z",
+              "userId": "2"
+              },{
+              "createdAt": "2015-05-28T10:40:11.124Z",
+              "elapsedTime": 20.0,
+              "objectId": "01AdtrRQrT",
+              "updatedAt": "2015-05-28T10:40:11.124Z",
+              "userId": "2"
+              },{
+              "createdAt": "2015-05-28T10:40:11.124Z",
+              "elapsedTime": 30.0,
+              "objectId": "01AdtrRQrT",
+              "updatedAt": "2015-05-28T10:40:11.124Z",
+              "userId": "2"
+              }
+]}

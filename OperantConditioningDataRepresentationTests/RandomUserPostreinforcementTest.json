@@ -1,0 +1,38 @@
+{ "results": [
+	{
+        "age": 12,
+        "createdAt": "2015-05-28T09:09:07.679Z",
+        "gender": 0,
+        "objectId": "1",
+        "playingAmount": 1,
+        "playingFrequency": 1,
+        "reinforcementSchedule": 1,
+        "sessionLength": 120.0,
+        "uniqueId": "dQ9iv4A0yl",
+        "updatedAt": "2015-05-28T09:11:43.348Z"
+    },
+	{
+        "age": 11,
+        "createdAt": "2015-05-28T09:40:12.552Z",
+        "gender": 0,
+        "objectId": "2",
+        "playingAmount": 1,
+        "playingFrequency": 3,
+        "reinforcementSchedule": 1,
+        "sessionLength": 120.0,
+        "uniqueId": "BiBDHlnVrw",
+        "updatedAt": "2015-05-28T10:02:33.431Z"
+    },
+	{
+        "age": 11,
+        "createdAt": "2015-05-28T10:29:01.937Z",
+        "gender": 1,
+        "objectId": "3",
+        "playingAmount": 0,
+        "playingFrequency": 0,
+        "reinforcementSchedule": 2,
+        "sessionLength": 120.0,
+        "uniqueId": "Lr0hESKy4R",
+        "updatedAt": "2015-05-28T10:36:09.171Z"
+    }
+] }

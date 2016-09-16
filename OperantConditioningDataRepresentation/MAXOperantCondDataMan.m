@@ -88,6 +88,23 @@
     return array;
 }
 
+-(NSArray <MAXRandomUser *> *)usersWithIds:(NSArray<NSString *> *)theIds {
+    
+    NSMutableArray *array = [NSMutableArray array];
+    
+    for (NSString *currentId in theIds) {
+        
+        for (MAXRandomUser *currentUser in self.users) {
+            if ([currentUser.objectId isEqualToString: currentId] == YES) {
+                [array addObject: currentUser];
+            }
+        }
+        
+    }
+    
+    return array;
+}
+
 -(NSArray <NSArray <MAXReinforcer *> *> *)behaviorForUsersByUser:(NSArray *)theUsers {
     NSMutableArray *array = [NSMutableArray array];
     for (int i = 0; i < theUsers.count; i++) {
@@ -159,6 +176,102 @@
 }
 
 #pragma mark - Data Information
+
+-(double)avgPostreinforcementTimeForUsers:(NSArray *)theUsers {
+    
+    double avgPostTime = 0;
+    
+    for (MAXRandomUser *currentUser in theUsers) {
+        
+        double totalPosttimeUser = 0;
+        
+        NSArray <MAXReinforcer *> *reinforcersForUser = [self p_reinforcerSortedByElapsedTime:[self reinforcerOnlyForUsers: @[currentUser]] ascending:YES];
+        NSArray <MAXBehavior *> *behaviorsForUser = [self p_behaviorSortedByElapsedTime:[self behaviorOnlyForUsers: @[currentUser]] ascending:YES];
+        
+        for (MAXReinforcer *currentReinforcer in reinforcersForUser) {
+            
+            MAXBehavior *nextBehavior = [self p_nextBehaviorSortedByElapsedTime: behaviorsForUser afterTime: [currentReinforcer.elapsedTime doubleValue]];
+            
+            if (nextBehavior != nil) {
+                totalPosttimeUser += [nextBehavior.elapsedTime doubleValue] - [currentReinforcer.elapsedTime doubleValue];
+            }
+            
+        }
+        
+        avgPostTime += totalPosttimeUser / reinforcersForUser.count;
+        
+    }
+    
+    avgPostTime = avgPostTime / theUsers.count;
+    
+    return avgPostTime;
+}
+
+-(double)avgMaxPostreinforcementTimeForUsers:(NSArray *)theUsers {
+    
+    double avgMaxPostTime = 0;
+    
+    for (MAXRandomUser *currentUser in theUsers) {
+        
+        double maxPostTimeUser = 0;
+        
+        NSArray <MAXReinforcer *> *reinforcersForUser = [self p_reinforcerSortedByElapsedTime:[self reinforcerOnlyForUsers: @[currentUser]] ascending:YES];
+        NSArray <MAXBehavior *> *behaviorsForUser = [self p_behaviorSortedByElapsedTime:[self behaviorOnlyForUsers: @[currentUser]] ascending:YES];
+        
+        for (MAXReinforcer *currentReinforcer in reinforcersForUser) {
+            
+            MAXBehavior *nextBehavior = [self p_nextBehaviorSortedByElapsedTime: behaviorsForUser afterTime: [currentReinforcer.elapsedTime doubleValue]];
+            
+            if (nextBehavior != nil) {
+                double postTime = [nextBehavior.elapsedTime doubleValue] - [currentReinforcer.elapsedTime doubleValue];
+                if (postTime > maxPostTimeUser) {
+                    maxPostTimeUser = postTime;
+                }
+            }
+        }
+        
+        avgMaxPostTime += maxPostTimeUser;
+    }
+    
+    avgMaxPostTime = avgMaxPostTime / theUsers.count;
+
+    return avgMaxPostTime;
+}
+
+-(double)avgMinPostreinforcementTimeForUsers:(NSArray *)theUsers {
+    
+    double avgMinPostTime = 0;
+    
+    for (MAXRandomUser *currentUser in theUsers) {
+        
+        double minPostTimeUser = INFINITY;
+        
+        NSArray <MAXReinforcer *> *reinforcersForUser = [self p_reinforcerSortedByElapsedTime:[self reinforcerOnlyForUsers: @[currentUser]] ascending:YES];
+        NSArray <MAXBehavior *> *behaviorsForUser = [self p_behaviorSortedByElapsedTime:[self behaviorOnlyForUsers: @[currentUser]] ascending:YES];
+        
+        for (MAXReinforcer *currentReinforcer in reinforcersForUser) {
+            
+            MAXBehavior *nextBehavior = [self p_nextBehaviorSortedByElapsedTime: behaviorsForUser afterTime: [currentReinforcer.elapsedTime doubleValue]];
+            if (nextBehavior != nil) {
+                
+                double postTime = [nextBehavior.elapsedTime doubleValue] - [currentReinforcer.elapsedTime doubleValue];
+                
+                if (postTime < minPostTimeUser) {
+                    minPostTimeUser = postTime;
+                }
+                
+            }
+            
+        }
+        
+        avgMinPostTime += minPostTimeUser;
+        
+    }
+    
+    avgMinPostTime = avgMinPostTime / theUsers.count;
+    
+    return avgMinPostTime;
+}
 
 -(float)avgBehaviorForUsers:(NSArray *)theUsers {
     
@@ -301,6 +414,37 @@
 }
 
 #pragma mark - Helpers
+
+
+-(MAXBehavior *)p_nextBehaviorSortedByElapsedTime:(NSArray <MAXBehavior *> *)theBehaviors afterTime:(double)theTime {
+    
+    MAXBehavior *behavior = nil;
+    
+    for (MAXBehavior *currentBehavior in theBehaviors) {
+        
+        if ([currentBehavior.elapsedTime doubleValue] > theTime) {
+            behavior = currentBehavior;
+            break;
+        }
+        
+    }
+    
+    return behavior;
+}
+
+-(NSArray <MAXBehavior *> *)p_behaviorSortedByElapsedTime:(NSArray <MAXBehavior *> *)theBehaviors ascending:(BOOL)ascending {
+    
+    NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:@"elapsedTime" ascending: ascending];
+    
+    return [theBehaviors sortedArrayUsingDescriptors: @[descriptor]];
+}
+
+-(NSArray <MAXReinforcer *> *)p_reinforcerSortedByElapsedTime:(NSArray <MAXReinforcer *> *)theReinforcers ascending:(BOOL)ascending {
+    
+    NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:@"elapsedTime" ascending: ascending];
+    
+    return [theReinforcers sortedArrayUsingDescriptors: @[descriptor]];
+}
 
 -(NSArray*)p_correctBehaviorFromBehaviorArray:(NSArray*)theBehaviorArray {
     NSMutableArray *array = [NSMutableArray array];
