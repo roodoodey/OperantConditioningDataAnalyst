@@ -284,7 +284,7 @@ const int maxTimePlayed = 610;
 
 -(NSString *)stdDevPostreinforcementTime {
     
-    return @"";
+    return [NSString stringWithFormat:@"%.2f", [_dataMan stdDevPostreinforcementTimeForUsers: @[_randomUser]]];
 }
 
 -(NSString *)minPostreinforcementTime {
@@ -371,6 +371,7 @@ const int maxTimePlayed = 610;
 }
 
 -(BOOL)sessionLengthIncorrect {
+    
     if ([_randomUser.sessionLength floatValue] < 120 || [_randomUser.sessionLength floatValue] > 660) {
         return YES;
     }
@@ -389,6 +390,7 @@ const int maxTimePlayed = 610;
 }
 
 -(void)includeOrExcludeData {
+    
     if ([self isExcluded]) {
         [UserDefaults removeExcludedUserWithId:_randomUser.objectId];
     }
