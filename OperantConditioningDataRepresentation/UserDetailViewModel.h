@@ -45,4 +45,8 @@
 -(NSInteger)numberOfReinforcers;
 -(double)horizontalValueForReinforcerAtIndex:(NSUInteger)theIndex;
 
+// block view data
+-(NSString *)titleForRow:(NSInteger)theRow col:(NSInteger)theCol;
+-(NSString *)dataStringForRow:(NSInteger)theRow col:(NSInteger)theCol;
+
 @end

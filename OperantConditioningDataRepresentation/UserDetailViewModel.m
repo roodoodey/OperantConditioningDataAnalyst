@@ -57,10 +57,182 @@ const int maxTimePlayed = 610;
     return self;
 }
 
+-(NSString *)titleForRow:(NSInteger)theRow col:(NSInteger)theCol {
+    
+    if (theRow == 0) {
+        return @"Reinforcement Schedule";
+    }
+    else if(theRow == 1) {
+        
+        return @"Elapsed Time";
+    }
+    else if(theRow == 2) {
+        
+        if (theCol == 0) {
+            return @"Total responses";
+        }
+        else {
+            return @"total reinforcers";
+        }
+        
+    }
+    else if(theRow == 3) {
+        
+        if (theCol == 0) {
+            return @"Avg. Behavior (30 sec)";
+        }
+        else {
+            return @"Std Behavior (30 sec)";
+        }
+    }
+    else if(theRow == 4) {
+        
+        if (theCol == 0) {
+            return @"Avg. Reinforcer (30 sec)";
+        }
+        else {
+            return @"Std. Reinforcer (30 sec)";
+        }
+        
+    }
+    else if(theRow == 5) {
+        
+        if (theCol == 0) {
+            return @"Avg Postreinforcement pause";
+        }
+        else {
+            return @"Std. Postreinforcement pause";
+        }
+        
+    }
+    else if(theRow == 6) {
+        
+        if (theCol == 0) {
+            return @"Min postreinforcement pause";
+        }
+        else {
+            return @"Max postreinforcement pause";
+        }
+        
+    }
+    else if(theRow == 7) {
+        
+        return @"Gender";
+        
+    }
+    else if(theRow == 8) {
+        
+        if (theCol == 0) {
+            return @"Play frequency a week";
+        }
+        else {
+            return @"Play amount (hours / week)";
+        }
+        
+    }
+    
+    return @"Missing data";
+}
+
+-(NSString *)dataStringForRow:(NSInteger)theRow col:(NSInteger)theCol {
+    
+    if (theRow == 0) {
+        return [self reinforcementScheduleName];
+    }
+    else if(theRow == 1) {
+        
+        return [self sessionLength];
+    }
+    else if(theRow == 2) {
+        
+        if (theCol == 0) {
+            return [self totalBehaviorForUser];
+        }
+        else {
+            return [self totalReinforcersForUsers];
+        }
+        
+    }
+    else if(theRow == 3) {
+        
+        if (theCol == 0) {
+            return [self avgBehavior];
+        }
+        else {
+            return [self stdDevBehavior];
+        }
+        
+    }
+    else if(theRow == 4) {
+        
+        if (theCol == 0) {
+            return [self avgReinforcer];
+        }
+        else {
+            return [self stdDevReinforcer];
+        }
+        
+    }
+    else if(theRow == 5) {
+        
+        if (theCol == 0) {
+            return [self avgPostreinforcementTime];
+        }
+        else {
+            return [self stdDevPostreinforcementTime];
+        }
+        
+    }
+    else if(theRow == 6) {
+        
+        if (theCol == 0) {
+            return [self minPostreinforcementTime];
+        }
+        else {
+            return [self maxPostreinforcementTime];
+        }
+        
+    }
+    else if(theRow == 7) {
+        
+        return [self userGender];
+    }
+    else if(theRow == 8) {
+        
+        if (theCol == 0) {
+            return [self userPlayFreq];
+        }
+        else {
+            return [self userPlayAmount];
+        }
+        
+    }
+    
+    return @"";
+}
+
 #pragma mark - Getter methods
 
 -(NSString*)userId {
     return _randomUser.objectId;
+}
+
+-(NSString *)reinforcementScheduleName {
+    
+    if ([_randomUser.reinforcementSchedule intValue] == kFISchedule) {
+        return @"FI";
+    }
+    else if([_randomUser.reinforcementSchedule intValue] == kVISchedule) {
+        return @"VI";
+    }
+    else if([_randomUser.reinforcementSchedule intValue] == kFRSchedule) {
+        return @"FR";
+    }
+    else if([_randomUser.reinforcementSchedule intValue] == kVRSchedule) {
+        return @"VR";
+    }
+    
+    return @"";
 }
 
 -(NSString*)sessionLength {
@@ -103,6 +275,26 @@ const int maxTimePlayed = 610;
 
 -(NSString*)stdDevReinforcer {
     return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevReinforcerForUsers: @[_randomUser]] * 30.0];
+}
+
+-(NSString *)avgPostreinforcementTime {
+    
+    return [NSString stringWithFormat:@"%.2f", [_dataMan avgPostreinforcementTimeForUsers: @[_randomUser]]];
+}
+
+-(NSString *)stdDevPostreinforcementTime {
+    
+    return @"";
+}
+
+-(NSString *)minPostreinforcementTime {
+    
+    return [NSString stringWithFormat:@"%.2f", [_dataMan avgMinPostreinforcementTimeForUsers: @[_randomUser]]];
+}
+
+-(NSString *)maxPostreinforcementTime {
+    
+    return [NSString stringWithFormat:@"%.2f", [_dataMan avgMaxPostreinforcementTimeForUsers: @[_randomUser]]];
 }
 
 -(NSString *)userGender {
@@ -170,12 +362,12 @@ const int maxTimePlayed = 610;
 
 -(NSString *)totalBehaviorForUser {
     
-    return [NSString stringWithFormat:@"%lu", _behaviorArray.count];
+    return [NSString stringWithFormat:@"%lu", (unsigned long)_behaviorArray.count];
 }
 
 -(NSString *)totalReinforcersForUsers {
     
-    return [NSString stringWithFormat:@"%lu", _behaviorArray.count];
+    return [NSString stringWithFormat:@"%lu", (unsigned long)_reinforcerArray.count];
 }
 
 -(BOOL)sessionLengthIncorrect {
