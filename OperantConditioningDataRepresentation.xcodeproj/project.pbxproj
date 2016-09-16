@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		4EFE87521D7F248700AF61BB /* MAXPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFE874F1D7F248700AF61BB /* MAXPageControl.m */; };
 		4EFE87531D7F248700AF61BB /* MAXPagingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFE87511D7F248700AF61BB /* MAXPagingScrollView.m */; };
+		8842008D1D8C6EC100A477DA /* OperantConditioningPostreinforcementDataMockTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8842008C1D8C6EC100A477DA /* OperantConditioningPostreinforcementDataMockTest.m */; };
+		884200921D8C71BA00A477DA /* ReinforcerPostreinforcementTest.json in Resources */ = {isa = PBXBuildFile; fileRef = 8842008F1D8C71BA00A477DA /* ReinforcerPostreinforcementTest.json */; };
+		884200931D8C71BA00A477DA /* BehaviorPostreinforcementTest.json in Resources */ = {isa = PBXBuildFile; fileRef = 884200901D8C71BA00A477DA /* BehaviorPostreinforcementTest.json */; };
+		884200941D8C71BA00A477DA /* RandomUserPostreinforcementTest.json in Resources */ = {isa = PBXBuildFile; fileRef = 884200911D8C71BA00A477DA /* RandomUserPostreinforcementTest.json */; };
 		8849A4F01C8BB534004567F4 /* MNFJsonAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F711C8B84F000DFEBAD /* MNFJsonAdapter.m */; };
 		8849A4F11C8BB53B004567F4 /* NSObject+MenigaRuntimeExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F741C8B84F000DFEBAD /* NSObject+MenigaRuntimeExtension.m */; };
 		8849A4F21C8BB53E004567F4 /* NSString+MNFExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F761C8B84F000DFEBAD /* NSString+MNFExtension.m */; };
@@ -110,6 +114,10 @@
 		4EFE874F1D7F248700AF61BB /* MAXPageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAXPageControl.m; sourceTree = "<group>"; };
 		4EFE87501D7F248700AF61BB /* MAXPagingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAXPagingScrollView.h; sourceTree = "<group>"; };
 		4EFE87511D7F248700AF61BB /* MAXPagingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAXPagingScrollView.m; sourceTree = "<group>"; };
+		8842008C1D8C6EC100A477DA /* OperantConditioningPostreinforcementDataMockTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperantConditioningPostreinforcementDataMockTest.m; sourceTree = "<group>"; };
+		8842008F1D8C71BA00A477DA /* ReinforcerPostreinforcementTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ReinforcerPostreinforcementTest.json; sourceTree = "<group>"; };
+		884200901D8C71BA00A477DA /* BehaviorPostreinforcementTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = BehaviorPostreinforcementTest.json; sourceTree = "<group>"; };
+		884200911D8C71BA00A477DA /* RandomUserPostreinforcementTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RandomUserPostreinforcementTest.json; sourceTree = "<group>"; };
 		8849A4F31C8BFAD9004567F4 /* ReinforcerTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ReinforcerTest.json; sourceTree = "<group>"; };
 		8849A4F51C8BFBE2004567F4 /* BehaviorTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = BehaviorTest.json; sourceTree = "<group>"; };
 		8849A4F71C8BFC07004567F4 /* RandomUserTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RandomUserTest.json; sourceTree = "<group>"; };
@@ -282,6 +290,17 @@
 			name = "Line Chart View";
 			sourceTree = "<group>";
 		};
+		8842008E1D8C6EC800A477DA /* Postreinforcement tests */ = {
+			isa = PBXGroup;
+			children = (
+				8842008F1D8C71BA00A477DA /* ReinforcerPostreinforcementTest.json */,
+				884200901D8C71BA00A477DA /* BehaviorPostreinforcementTest.json */,
+				884200911D8C71BA00A477DA /* RandomUserPostreinforcementTest.json */,
+				8842008C1D8C6EC100A477DA /* OperantConditioningPostreinforcementDataMockTest.m */,
+			);
+			name = "Postreinforcement tests";
+			sourceTree = "<group>";
+		};
 		88821F4F1C1904BB00B99DD2 /* Reinforcement Comparison  */ = {
 			isa = PBXGroup;
 			children = (
@@ -337,7 +356,7 @@
 			name = "Json Data";
 			sourceTree = "<group>";
 		};
-		88DB6F851C8B88DD00DFEBAD /* Normal Model Objects */ = {
+		88DB6F851C8B88DD00DFEBAD /* Normal Model Objects & Data Man */ = {
 			isa = PBXGroup;
 			children = (
 				88DB6F861C8B890A00DFEBAD /* MAXBehavior.h */,
@@ -349,7 +368,7 @@
 				88C8354B1C8B992300E5D8C5 /* MAXOperantCondDataMan.h */,
 				88C8354C1C8B992300E5D8C5 /* MAXOperantCondDataMan.m */,
 			);
-			name = "Normal Model Objects";
+			name = "Normal Model Objects & Data Man";
 			sourceTree = "<group>";
 		};
 		88DF19971B97E2A5009B076B = {
@@ -373,7 +392,7 @@
 		88DF19A21B97E2A5009B076B /* OperantConditioningDataRepresentation */ = {
 			isa = PBXGroup;
 			children = (
-				88DB6F851C8B88DD00DFEBAD /* Normal Model Objects */,
+				88DB6F851C8B88DD00DFEBAD /* Normal Model Objects & Data Man */,
 				88DF1A081B98746F009B076B /* User Defaults */,
 				88DF1A031B97E900009B076B /* Parse Model Objects */,
 				88DF19EA1B97E6DF009B076B /* Libraries, Categories and Reusable Components */,
@@ -404,6 +423,7 @@
 		88DF19BC1B97E2A5009B076B /* OperantConditioningDataRepresentationTests */ = {
 			isa = PBXGroup;
 			children = (
+				8842008E1D8C6EC800A477DA /* Postreinforcement tests */,
 				88DB6F7B1C8B862100DFEBAD /* Json Data */,
 				88DB6F7A1C8B85AA00DFEBAD /* Json Adapter */,
 				88DF19BF1B97E2A5009B076B /* OperantConditioningDataRepresentationTests.m */,
@@ -713,8 +733,11 @@
 			files = (
 				8849A4F81C8BFC07004567F4 /* RandomUserTest.json in Resources */,
 				88DB6F821C8B884700DFEBAD /* Behavior.json in Resources */,
+				884200941D8C71BA00A477DA /* RandomUserPostreinforcementTest.json in Resources */,
 				8849A4F61C8BFBE2004567F4 /* BehaviorTest.json in Resources */,
 				8849A4F41C8BFAD9004567F4 /* ReinforcerTest.json in Resources */,
+				884200921D8C71BA00A477DA /* ReinforcerPostreinforcementTest.json in Resources */,
+				884200931D8C71BA00A477DA /* BehaviorPostreinforcementTest.json in Resources */,
 				88DB6F841C8B884D00DFEBAD /* Reinforcer.json in Resources */,
 				88DB6F831C8B884B00DFEBAD /* RandomUser.json in Resources */,
 			);
@@ -777,6 +800,7 @@
 				88DB6F781C8B84F000DFEBAD /* NSObject+MenigaRuntimeExtension.m in Sources */,
 				88DB6F791C8B84F000DFEBAD /* NSString+MNFExtension.m in Sources */,
 				88DB6F891C8B891100DFEBAD /* MAXBehavior.m in Sources */,
+				8842008D1D8C6EC100A477DA /* OperantConditioningPostreinforcementDataMockTest.m in Sources */,
 				88DB6F8D1C8B891E00DFEBAD /* MAXReinforcer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
