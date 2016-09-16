@@ -111,5 +111,27 @@ static MAXOperantCondDataMan *_dataMan;
     
 }
 
+-(void)testFIUsersStdDevMaxPostreinforcementPause {
+    
+    NSArray <MAXRandomUser *> *FIUsers = [_dataMan usersWithReinforcementSchedule: kFISchedule];
+    
+    double stdDevMaxPostreinforcementPause = [_dataMan stdDevMaxPostreinforcementTimeForUsers: FIUsers];
+    NSString *stdDevString = [NSString stringWithFormat:@"%.4f", stdDevMaxPostreinforcementPause];
+    
+    XCTAssertEqualObjects(stdDevString, @"0.5000");
+    
+}
+
+-(void)testFIUsersStdDevMinPostreinforcementPause {
+    
+    NSArray <MAXRandomUser *> *FIUsers = [_dataMan usersWithReinforcementSchedule: kFISchedule];
+    
+    double stdDevMinPostreinforcementPause = [_dataMan stdDevMinPostreinforcemenTimeForUsers: FIUsers];
+    NSString *stdDevString = [NSString stringWithFormat:@"%.4f", stdDevMinPostreinforcementPause];
+    
+    XCTAssertEqualObjects(stdDevString, @"0.5000");
+    
+}
+
 
 @end

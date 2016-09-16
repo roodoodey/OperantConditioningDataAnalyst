@@ -177,6 +177,8 @@
 
 #pragma mark - Data Information
 
+#pragma mark - Postreinforcement pause
+
 -(double)avgPostreinforcementTimeForUsers:(NSArray *)theUsers {
     
     double avgPostTime = 0;
@@ -270,6 +272,24 @@
     return avgMaxPostTime;
 }
 
+-(double)stdDevMaxPostreinforcementTimeForUsers:(NSArray *)theUsers {
+    
+    double stdDevMaxPostreinforcement = 0;
+    
+    double averagePostreinforcementForUsers = [self avgMaxPostreinforcementTimeForUsers: theUsers];
+    double meanVariance = 0;
+    
+    for (MAXRandomUser *currentUser in theUsers) {
+        
+        double maxPostreinforcementForUser = [self avgMaxPostreinforcementTimeForUsers: @[currentUser]];
+        meanVariance += pow(maxPostreinforcementForUser - averagePostreinforcementForUsers, 2);
+        
+    }
+    
+    stdDevMaxPostreinforcement = sqrt(meanVariance / theUsers.count);
+    return stdDevMaxPostreinforcement;
+}
+
 -(double)avgMinPostreinforcementTimeForUsers:(NSArray *)theUsers {
     
     double avgMinPostTime = 0;
@@ -305,6 +325,24 @@
     return avgMinPostTime;
 }
 
+-(double)stdDevMinPostreinforcemenTimeForUsers:(NSArray *)theUsers {
+    
+    double stdDevMinPostreinforcement = 0;
+    
+    double averageMinPostreinforcment = [self avgMinPostreinforcementTimeForUsers: theUsers];
+    double meanVariance = 0;
+    
+    for (MAXRandomUser *currentUser in theUsers) {
+        
+        double minPostreinforcementForUser = [self avgMinPostreinforcementTimeForUsers: @[currentUser]];
+        meanVariance += pow(minPostreinforcementForUser - averageMinPostreinforcment, 2);
+        
+    }
+    
+    stdDevMinPostreinforcement = sqrt(meanVariance / theUsers.count);
+    return stdDevMinPostreinforcement;
+}
+
 -(float)avgBehaviorForUsers:(NSArray *)theUsers {
     
     float amountOfBehavior = 0;
@@ -316,6 +354,7 @@
     return amountOfBehavior / theUsers.count;
 }
 
+#pragma mark - Behavior
 
 -(float)avgReinforcerForUsers:(NSArray *)theUsers {
     
