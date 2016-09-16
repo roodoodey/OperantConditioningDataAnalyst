@@ -77,9 +77,10 @@ static MAXOperantCondDataMan *_dataMan;
     float stdTime = [_dataMan stdDevTimeForUsers:FIUsers];
     NSLog(@"FI std dev time: %f", stdTime);
     
-    int numBehaviorsForUser = (int)[_dataMan behaviorOnlyForUsers:FIUsers].count;
-    NSLog(@"behavior FI: %d, num users: %d", numBehaviorsForUser, (int)FIUsers.count);
-    NSLog(@"avg behavior FI: %f", numBehaviorsForUser / (float)FIUsers.count);
+    int numBehaviorsForUser = (int)[_dataMan behaviorOnlyForUsers: FIUsers].count;
+    int numReinforcersForUser = (int)[_dataMan reinforcerOnlyForUsers: FIUsers].count;
+    NSLog(@"behavior FI: %d, reinforcers FI: %d, num users: %d", numBehaviorsForUser, numReinforcersForUser, (int)FIUsers.count);
+    NSLog(@"avg behavior FI: %f, avg reinforcers FI: %f", numBehaviorsForUser / (float)FIUsers.count, numReinforcersForUser / (float)FIUsers.count);
 }
 
 
@@ -113,9 +114,10 @@ static MAXOperantCondDataMan *_dataMan;
     float stdTime = [_dataMan stdDevTimeForUsers:VIUsers];
     NSLog(@"VI std dev time: %f", stdTime);
     
-    int numBehaviorsForUser = (int)[_dataMan behaviorOnlyForUsers:VIUsers].count;
-    NSLog(@"behavior VI: %d, num users: %d", numBehaviorsForUser, (int)VIUsers.count);
-    NSLog(@"avg behavior VI: %f", numBehaviorsForUser / (float)VIUsers.count);
+    int numBehaviorsForUser = (int)[_dataMan behaviorOnlyForUsers: VIUsers].count;
+    int numReinforcersForUser = (int)[_dataMan reinforcerOnlyForUsers: VIUsers].count;
+    NSLog(@"behavior VI: %d, reinforcers VI: %d, num users: %d", numBehaviorsForUser, numReinforcersForUser, (int)VIUsers.count);
+    NSLog(@"avg behavior VI: %f, avg reinforcers VI: %f", numBehaviorsForUser / (float)VIUsers.count, numReinforcersForUser / (float)VIUsers.count);
     
 }
 
@@ -148,9 +150,10 @@ static MAXOperantCondDataMan *_dataMan;
     float stdTime = [_dataMan stdDevTimeForUsers:FRUsers];
     NSLog(@"FR std dev time: %f", stdTime);
    
-    int numBehaviorsForUser = (int)[_dataMan behaviorOnlyForUsers:FRUsers].count;
-    NSLog(@"behavior FR: %d, num users: %d", numBehaviorsForUser, (int)FRUsers.count);
-    NSLog(@"avg behavior FR: %f", numBehaviorsForUser / (float)FRUsers.count);
+    int numBehaviorsForUser = (int)[_dataMan behaviorOnlyForUsers: FRUsers].count;
+    int numReinforcersForUser = (int)[_dataMan reinforcerOnlyForUsers: FRUsers].count;
+    NSLog(@"behavior FR: %d, reinforcers FR: %d, num users: %d", numBehaviorsForUser, numReinforcersForUser, (int)FRUsers.count);
+    NSLog(@"avg behavior FR: %f, avg reinforcers FR: %f", numBehaviorsForUser / (float)FRUsers.count, numReinforcersForUser / (float)FRUsers.count);
 }
 
 -(void)testVRSchedule {
@@ -182,9 +185,10 @@ static MAXOperantCondDataMan *_dataMan;
     float stdTime = [_dataMan stdDevTimeForUsers:VRUsers];
     NSLog(@"VR std dev time: %f", stdTime);
     
-    int numBehaviorsForUsers = (int)[_dataMan behaviorOnlyForUsers:VRUsers].count;
-    NSLog(@"behavior VR: %d, num users: %d", numBehaviorsForUsers, (int)VRUsers.count);
-    NSLog(@"avg behavior VR: %f", (float)numBehaviorsForUsers / (float)VRUsers.count);
+    int numBehaviorsForUsers = (int)[_dataMan behaviorOnlyForUsers: VRUsers].count;
+    int numReinforcersForUsers = (int)[_dataMan reinforcerOnlyForUsers: VRUsers].count;
+    NSLog(@"behavior VR: %d, reinforcer VR: %d, num users: %d", numBehaviorsForUsers, numReinforcersForUsers, (int)VRUsers.count);
+    NSLog(@"avg behavior VR: %f, avg reinforcers VR: %f", (float)numBehaviorsForUsers / (float)VRUsers.count, numReinforcersForUsers / (float)VRUsers.count);
     
 }
 
