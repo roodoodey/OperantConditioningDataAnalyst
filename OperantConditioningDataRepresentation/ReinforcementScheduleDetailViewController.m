@@ -90,7 +90,7 @@
     if (_scrollView == nil) {
         
         // containing scroll view
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - 64)];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - 64)];
         [self.view addSubview:_scrollView];
         
         
@@ -141,12 +141,13 @@
         [_scrollView addSubview:maxYValueLabel];
         
         
-        MAXBlockView *blockView = [[MAXBlockView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_lineChart.frame) + 40, CGRectGetWidth(self.view.frame), 400)];
+        MAXBlockView *blockView = [[MAXBlockView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_lineChart.frame) + 40, CGRectGetWidth(self.view.frame), 600)];
         blockView.delegate = self;
         blockView.datasource = self;
         [blockView reloadData];
         [_scrollView addSubview:blockView];
         
+        _scrollView.contentSize = CGSizeMake( CGRectGetWidth(self.view.frame), CGRectGetMaxY(blockView.frame));
         
         [_lineChart reloadData];
         
@@ -307,16 +308,13 @@
 }
 
 -(NSInteger)numRowsInBlockView:(MAXBlockView *)theBlockView {
-    return 2;
+    return 4;
 }
 
 -(NSInteger)numColumnsInBlockView:(MAXBlockView *)theBlockView inRow:(NSUInteger)theRow {
     
-    if (theRow == 1) {
-        return 2;
-    }
     
-    return 1;
+    return 2;
 }
 
 -(CGFloat)heightForRow:(NSUInteger)theRow {

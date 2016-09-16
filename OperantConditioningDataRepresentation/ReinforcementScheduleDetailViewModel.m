@@ -129,15 +129,44 @@
 
 -(NSString*)titleForRow:(NSInteger)theRow col:(NSInteger)theCol {
     if (theRow == 0) {
-        return @"Avg. Session Length";
+        
+        if (theCol == 0) {
+            return @"Avg. Session Length";
+        }
+        else if(theCol == 1) {
+            return @"Std. dev Session Length";
+        }
+        
     }
     else if(theRow == 1) {
+        
+        if (theCol == 0) {
+            return @"Avg. Session Length";
+        }
+        else if(theRow == 1) {
+            return @"Std. dev Session Length";
+        }
+        
+    }
+    else if(theRow == 2) {
+        
         if (theCol == 0) {
             return @"Avg. Behavior (30 sec)";
         }
         else if(theCol == 1) {
+            return @"Std. dev Behavior (30 sec)";
+        }
+        
+    }
+    else if(theRow == 3) {
+        
+        if (theCol == 0) {
             return @"Avg. Reinforcer (30 sec)";
         }
+        else if(theCol == 1) {
+            return @"Std. dev Reinforcer (30 sec)";
+        }
+        
     }
     
     return @"";
@@ -146,9 +175,26 @@
 -(NSString*)dataTitleForRow:(NSInteger)theRow col:(NSInteger)theCol {
     
     if (theRow == 0) {
-        return [self avgSessionLength];
+        
+        if (theCol == 0) {
+            return [self avgSessionLengthMinutesAndSeconds];
+        }
+        else if(theCol == 1) {
+            return [self stdDevSessionLengthMinutesAndSeconds];
+        }
+        
     }
     else if(theRow == 1) {
+        
+        if (theCol == 0) {
+            return [self avgSessionLengthSeconds];
+        }
+        else if(theCol == 1) {
+            return [self stdDevSessionLengthSeconds];
+        }
+        
+    }
+    else if(theRow == 2) {
         
         if (theCol == 0) {
             
@@ -156,8 +202,20 @@
         }
         else if(theCol == 1) {
            
+            return [self stdDevBehavior];
+        }
+    }
+    else if(theRow == 3) {
+        
+        if (theCol == 0) {
+            
             return [self avgReinforcer];
         }
+        else if(theCol == 1) {
+            
+            return [self stdDevReinforcer];
+        }
+        
     }
     
     return @"";
@@ -165,14 +223,26 @@
 
 -(NSString*)avgBehavior {
     
-    return [NSString stringWithFormat:@"%.02f", [_dataMan avgBehaviorForUsers:_randomUsers] * 30.0];
+    return [NSString stringWithFormat:@"%.04f", [_dataMan avgBehaviorForUsers: _randomUsers] * 30.0];
+}
+
+-(NSString *)stdDevBehavior {
+    
+    return [NSString stringWithFormat:@"%.04f", [_dataMan stdDevBehaviorForUsers: _randomUsers] * 30.0];
 }
 
 -(NSString*)avgReinforcer {
     
-    return [NSString stringWithFormat:@"%.02f", [_dataMan avgReinforcerForUsers:_randomUsers] * 30.0];
+    return [NSString stringWithFormat:@"%.04f", [_dataMan avgReinforcerForUsers: _randomUsers] * 30.0];
     
 }
+
+-(NSString *)stdDevReinforcer {
+    
+    return [NSString stringWithFormat:@"%.04f", [_dataMan stdDevReinforcerForUsers: _randomUsers] * 30.0];
+}
+
+
 
 -(NSArray*)reinforcerForUser:(RandomUser*)theRandomUser chartData:(NSArray*)theChartData {
     
@@ -202,29 +272,54 @@
     return nil;
 }
 
--(NSString*)avgSessionLength {
+-(NSString *)avgSessionLengthSeconds {
     
-    float sessionLength = 0;
+    return [NSString stringWithFormat:@"%.4f", [_dataMan avgTimeForUsers: _randomUsers]];
+}
+
+-(NSString *)stdDevSessionLengthSeconds {
     
-    for (MAXRandomUser *user in _randomUsers) {
-        sessionLength += [user.sessionLength floatValue];
-    }
+    return [NSString stringWithFormat:@"%.4f", [_dataMan stdDevTimeForUsers: _randomUsers]];
+}
+
+-(NSString*)avgSessionLengthMinutesAndSeconds {
     
-    sessionLength /= (float)_randomUsers.count;
+    float avgSessionLength = [_dataMan avgTimeForUsers: _randomUsers];
     
-    int minutes = (int)sessionLength / 60;
+    int minutes = (int)avgSessionLength / 60;
     NSString *minuteString = [NSString stringWithFormat:@"%d", minutes];
     if (minutes < 10) {
         minuteString = [NSString stringWithFormat:@"0%d", minutes];
     }
     
-    int seconds = (int)sessionLength % 60;
+    int seconds = (int)avgSessionLength % 60;
     NSString *secondsString = [NSString stringWithFormat:@"%d", seconds];
     
     if (seconds < 10) {
         secondsString = [NSString stringWithFormat:@"0%d", seconds];
     }
     
+    
+    return [NSString stringWithFormat:@"%@ : %@", minuteString, secondsString];
+}
+
+-(NSString *)stdDevSessionLengthMinutesAndSeconds {
+    
+    float stdDevSessionLength = [_dataMan stdDevTimeForUsers: _randomUsers];
+    
+    int minutes = (int)stdDevSessionLength / 60;
+    NSString *minuteString = [NSString stringWithFormat:@"%d", minutes];
+    
+    if (minutes < 10) {
+        minuteString = [NSString stringWithFormat:@"0%d", minutes];
+    }
+    
+    int seconds = (int)stdDevSessionLength % 60;
+    NSString *secondsString = [NSString stringWithFormat:@"%d", seconds];
+    
+    if (seconds < 10) {
+        secondsString = [NSString stringWithFormat:@"0%d", seconds];
+    }
     
     return [NSString stringWithFormat:@"%@ : %@", minuteString, secondsString];
 }
