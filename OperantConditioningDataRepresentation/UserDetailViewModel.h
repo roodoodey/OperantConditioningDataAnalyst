@@ -27,12 +27,17 @@
 -(NSString *)maxXValue;
 -(NSString *)maxYValue;
 
+-(NSString *)totalBehaviorForUser;
+-(NSString *)totalReinforcersForUsers;
+
+
 -(BOOL)sessionLengthIncorrect;
 -(BOOL)isExcluded;
 -(void)includeOrExcludeData;
 
 // chart data
 -(NSInteger)numberOfLines;
+-(CGFloat)highestYValue;
 -(NSUInteger)numberOfVerticalValuesAtIndes:(NSUInteger)lineIndex;
 -(CGFloat)verticalValueForHorizontalIndex:(NSUInteger)horizontalIndex;
 

@@ -90,19 +90,19 @@ const int maxTimePlayed = 610;
 
 -(NSString*)avgBehavior {
 
-    return [NSString stringWithFormat:@"%.02f", [_dataMan avgBehaviorForUsers: @[_randomUser]]];
+    return [NSString stringWithFormat:@"%.02f", [_dataMan avgBehaviorForUsers: @[_randomUser]] * 30.0];
 }
 
 -(NSString*)stdDevBehavior {
-    return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevBehaviorForUsers: @[_randomUser]]];
+    return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevBehaviorForUsers: @[_randomUser]] * 30.0];
 }
 
 -(NSString*)avgReinforcer {
-    return [NSString stringWithFormat:@"%.02f", [_dataMan avgReinforcerForUsers: @[_randomUser]]];
+    return [NSString stringWithFormat:@"%.02f", [_dataMan avgReinforcerForUsers: @[_randomUser]] * 30.0];
 }
 
 -(NSString*)stdDevReinforcer {
-    return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevReinforcerForUsers: @[_randomUser]]];
+    return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevReinforcerForUsers: @[_randomUser]] * 30.0];
 }
 
 -(NSString *)userGender {
@@ -160,12 +160,22 @@ const int maxTimePlayed = 610;
 
 -(NSString*)maxXValue {
     
-    return [NSString stringWithFormat:@"%d", 610];
+    return [NSString stringWithFormat:@"%d", 600];
 }
 
 -(NSString*)maxYValue {
     
-    return [NSString stringWithFormat:@"%d", 1100];
+    return [NSString stringWithFormat:@"%.0f", [self highestYValue]];
+}
+
+-(NSString *)totalBehaviorForUser {
+    
+    return [NSString stringWithFormat:@"%lu", _behaviorArray.count];
+}
+
+-(NSString *)totalReinforcersForUsers {
+    
+    return [NSString stringWithFormat:@"%lu", _behaviorArray.count];
 }
 
 -(BOOL)sessionLengthIncorrect {
@@ -257,7 +267,12 @@ const int maxTimePlayed = 610;
 -(NSUInteger)numberOfVerticalValuesAtIndes:(NSUInteger)lineIndex {
     NSLog(@"chart data count: %d", (int)_behaviorChartData.count);
 
-    return 610;
+    return _behaviorChartData.count;
+}
+
+-(CGFloat)highestYValue {
+    
+    return 1200;
 }
 
 -(CGFloat)verticalValueForHorizontalIndex:(NSUInteger)horizontalIndex {

@@ -472,11 +472,12 @@
 
 -(double)MAXhighestYValueForLineChart:(MAXLineChartView *)theLineChart {
     
-    return 1100;
+    return [_viewModel highestYValue];
 }
 
 -(double)MAXHighestXValueForLineChart:(MAXLineChartView *)theLineChart {
-    return 600;
+    
+    return [_viewModel numberOfVerticalValuesAtIndes: 0];
 }
 
 -(double)MAXLineChartLeftBorderWidthForChart:(MAXLineChartView *)theLineChart {
@@ -603,6 +604,32 @@
 -(CGFloat)MAXLineChartLowerMarginHeight:(MAXLineChartView *)theLineChart {
     
     return 30;
+}
+
+
+#pragma mark - Block view delegate
+
+
+#pragma mark - Helpers For Block View
+
+-(void)labelTitleForColView:(UIView*)theView withString:(NSString*)theString {
+    UILabel *labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(theView.frame), CGRectGetHeight(theView.frame) * 0.2)];
+    labelTitle.textAlignment = NSTextAlignmentCenter;
+    labelTitle.textColor = [UIColor flatWhiteColorDark];
+    labelTitle.text = theString;
+    labelTitle.font = [UIFont openSansWithSize:CGRectGetHeight(labelTitle.frame) * 0.8];
+    labelTitle.adjustsFontSizeToFitWidth = YES;
+    [theView addSubview:labelTitle];
+}
+
+-(void)labelForColView:(UIView*)theView withString:(NSString*)theString {
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(theView.frame) * 0.2, CGRectGetWidth(theView.frame), CGRectGetHeight(theView.frame) * 0.8)];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.textColor = [UIColor flatWhiteColor];
+    label.text = theString;
+    label.font = [UIFont openSansBoldWithSize:CGRectGetHeight(label.frame) * 0.6];
+    label.adjustsFontSizeToFitWidth = YES;
+    [theView addSubview:label];
 }
 
 
