@@ -43,8 +43,12 @@
 
 -(double)avgPostreinforcementTimeForUsers:(NSArray *)theUsers;
 -(double)stdDevPostreinforcementTimeForUsers:(NSArray *)theUsers;
+
 -(double)avgMinPostreinforcementTimeForUsers:(NSArray *)theUsers;
+-(double)stdDevMinPostreinforcemenTimeForUsers:(NSArray *)theUsers;
+
 -(double)avgMaxPostreinforcementTimeForUsers:(NSArray *)theUsers;
+-(double)stdDevMaxPostreinforcementTimeForUsers:(NSArray *)theUsers;
 
 -(float)avgBehaviorForUsers:(NSArray*)theUsers;
 -(float)avgReinforcerForUsers:(NSArray*)theUsers;

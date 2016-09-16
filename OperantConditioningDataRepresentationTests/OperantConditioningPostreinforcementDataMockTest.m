@@ -60,6 +60,16 @@ static MAXOperantCondDataMan *_dataMan;
     
 }
 
+-(void)testUserOneStdDevPostreinforcementPause {
+    
+    MAXRandomUser *userOne = [[_dataMan usersWithIds: @[@"1"]] firstObject];
+    
+    double stdDevPostreinforcementPause = [_dataMan stdDevPostreinforcementTimeForUsers: @[userOne]];
+    NSString *stdDevString = [NSString stringWithFormat:@"%.4f", stdDevPostreinforcementPause];
+    XCTAssertEqualObjects(stdDevString, @"0.7071");
+    
+}
+
 -(void)testFIUsersAvgPostreinforcementPause {
     
     NSArray <MAXRandomUser *> *FIUSers = [_dataMan usersWithReinforcementSchedule: kFISchedule];
@@ -87,6 +97,17 @@ static MAXOperantCondDataMan *_dataMan;
     double avgMinPostreinforcementPause = [_dataMan avgMinPostreinforcementTimeForUsers: FIUsers];
     
     XCTAssertTrue(avgMinPostreinforcementPause == 1.5);
+    
+}
+
+-(void)testFIUsersStdDevPostreinforcementPause {
+    
+    NSArray <MAXRandomUser *> *FIUSers = [_dataMan usersWithReinforcementSchedule: kFISchedule];
+    
+    double stdDevPostreinforcementPause = [_dataMan stdDevPostreinforcementTimeForUsers: FIUSers];
+    NSString *stdDevString = [NSString stringWithFormat:@"%.4f", stdDevPostreinforcementPause];
+    
+    XCTAssertEqualObjects(stdDevString, @"0.7618");
     
 }
 

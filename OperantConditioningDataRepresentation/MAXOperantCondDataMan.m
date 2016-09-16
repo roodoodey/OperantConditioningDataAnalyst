@@ -207,6 +207,38 @@
     return avgPostTime;
 }
 
+-(double)stdDevPostreinforcementTimeForUsers:(NSArray *)theUsers {
+    
+    double stdDevPostreinforcement = 0;
+    
+    for (MAXRandomUser *currentUser in theUsers) {
+        
+        double meanVariance = 0;
+        
+        NSArray <MAXReinforcer *> *reinforcersForUser = [self p_reinforcerSortedByElapsedTime:[self reinforcerOnlyForUsers: @[currentUser]] ascending:YES];
+        NSArray <MAXBehavior *> *behaviorsForUser = [self p_behaviorSortedByElapsedTime:[self behaviorOnlyForUsers: @[currentUser]] ascending:YES];
+        
+        double averagePostreinforcementForUser = [self avgPostreinforcementTimeForUsers: @[currentUser]];
+        
+        for (MAXReinforcer *currentReinforcer in reinforcersForUser) {
+            
+            MAXBehavior *nextBehavior = [self p_nextBehaviorSortedByElapsedTime: behaviorsForUser afterTime: [currentReinforcer.elapsedTime doubleValue]];
+            
+            if (nextBehavior != nil) {
+                double postTime = [nextBehavior.elapsedTime doubleValue] - [currentReinforcer.elapsedTime doubleValue];
+                meanVariance += pow(postTime - averagePostreinforcementForUser, 2);
+            }
+            
+        }
+        
+        stdDevPostreinforcement += sqrt(meanVariance / reinforcersForUser.count);
+        
+    }
+    
+    stdDevPostreinforcement = stdDevPostreinforcement / theUsers.count;
+    return stdDevPostreinforcement;
+}
+
 -(double)avgMaxPostreinforcementTimeForUsers:(NSArray *)theUsers {
     
     double avgMaxPostTime = 0;
