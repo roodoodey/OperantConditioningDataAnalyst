@@ -16,6 +16,7 @@
 #import "MAXPagingScrollView.h"
 #import "MAXLineChartView.h"
 #import "MAXBlockView.h"
+#import "MAXFadeBlockButton.h"
 
 
 @interface UserDetailViewController () <JBLineChartViewDataSource, JBLineChartViewDelegate, MAXLineChartDelegate, MAXLineChartDataSource, MAXBlockViewDatasource, MAXBlockViewDelegate> {
@@ -30,6 +31,8 @@
     UIView *includeOrExcludeView;
     
     UIScrollView *_scrollView;
+    UIScrollView *_scrollViewTwo;
+    MAXPagingScrollView *_pageView;
     
 }
 
@@ -72,33 +75,29 @@
     _cumulativeLineChart.datasource = self;
     _cumulativeLineChart.delegate = self;
     
-    MAXPagingScrollView *pageView = [[MAXPagingScrollView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - 64)];
+    _pageView = [[MAXPagingScrollView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - 64)];
     
-    [pageView MAXScrollViewNumPagesWithBlock:^ NSInteger {
+    [_pageView MAXScrollViewNumPagesWithBlock:^ NSInteger {
         
         return 2;
     }];
     
-    [pageView MAXScrollViewWithViewAtPageBlock:^(UIView *theView, NSInteger page) {
+    [_pageView MAXScrollViewWithViewAtPageBlock:^(UIView *theView, NSInteger page) {
        
         if (page == 0) {
             [theView addSubview: [self p_createSollViewOne]];
         }
         else {
-            [theView addSubview: _cumulativeLineChart];
+            [theView addSubview: [self p_createScrollViewTwo]];
         }
         
     }];
     
-    [self.view addSubview: pageView];
+    [self.view addSubview: _pageView];
     
     
     [lineChart reloadData];
-    [_cumulativeLineChart reloadData];
-    
-    _cumulativeLineChart.layer.transform = CATransform3DMakeRotation(M_PI_2, 0, 0, 1.0);
-    _cumulativeLineChart.frame = CGRectMake(0, 0, CGRectGetWidth(_cumulativeLineChart.frame), CGRectGetHeight(_cumulativeLineChart.frame));
-    [pageView reloadDataBlocks];
+    [_pageView reloadDataBlocks];
     
     [self updateData];
     
@@ -237,6 +236,56 @@
     
 }
 
+
+-(UIScrollView *)p_createScrollViewTwo {
+    
+    if (_scrollViewTwo == nil) {
+        
+        _scrollViewTwo = [[UIScrollView alloc] initWithFrame: CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - 64)];
+        
+        __block MAXFadeBlockButton *changeChartViewButton = [[MAXFadeBlockButton alloc] initWithFrame: CGRectMake(CGRectGetWidth(_scrollViewTwo.frame) / 2.0 - 60, CGRectGetHeight(_scrollViewTwo.frame) + 5, 120, 50)];
+        changeChartViewButton.layer.backgroundColor = [UIColor flatBlueColor].CGColor;
+        changeChartViewButton.layer.cornerRadius = 5.0;
+        changeChartViewButton.titleLabel.font = [UIFont helveticaNeueBoldWithSize: 14.0];
+        [changeChartViewButton setTitleColor:[UIColor flatWhiteColor] forState: UIControlStateNormal];
+        [changeChartViewButton setTitle:@"Overview" forState:UIControlStateNormal];
+        
+        [changeChartViewButton buttonTouchUpInsideWithCompletion:^{
+           
+            changeChartViewButton.selected = !changeChartViewButton.isSelected;
+            
+            if (changeChartViewButton.selected == YES) {
+                changeChartViewButton.layer.backgroundColor = [UIColor flatRedColor].CGColor;
+                [changeChartViewButton setTitle:@"Detail" forState:UIControlStateNormal];
+                _viewModel.isChartOverview = NO;
+            }
+            else {
+                changeChartViewButton.layer.backgroundColor = [UIColor flatBlueColor].CGColor;
+                [changeChartViewButton setTitle:@"Overview" forState:UIControlStateNormal];
+                _viewModel.isChartOverview = YES;
+            }
+            
+            [_pageView reloadDataBlocks];
+        }];
+        
+        [_scrollViewTwo addSubview: changeChartViewButton];
+        _scrollViewTwo.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame), CGRectGetMaxY(changeChartViewButton.frame) + 10);
+        
+    }
+    
+    [_cumulativeLineChart removeFromSuperview];
+    
+    _cumulativeLineChart = [[MAXLineChartView alloc] initWithFrame:CGRectMake(30, 0, CGRectGetHeight(_scrollViewTwo.frame), CGRectGetWidth(_scrollViewTwo.frame))];
+    _cumulativeLineChart.datasource = self;
+    _cumulativeLineChart.delegate = self;
+    [_cumulativeLineChart reloadData];
+    
+    _cumulativeLineChart.layer.transform = CATransform3DMakeRotation(M_PI_2, 0, 0, 1.0);
+    _cumulativeLineChart.frame = CGRectMake(0, 0, CGRectGetWidth(_cumulativeLineChart.frame), CGRectGetHeight(_cumulativeLineChart.frame));
+    [_scrollViewTwo addSubview: _cumulativeLineChart];
+    
+    return _scrollViewTwo;
+}
 
 #pragma mark - Line Chart Delegate & Data source
 

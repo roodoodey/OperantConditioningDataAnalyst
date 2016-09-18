@@ -15,6 +15,8 @@
 
 -(id)initWithUser:(MAXRandomUser *)theRandomUser;
 
+@property (nonatomic) BOOL isChartOverview;
+
 -(NSString *)userId;
 -(NSString *)sessionLength;
 -(NSString *)avgBehavior;

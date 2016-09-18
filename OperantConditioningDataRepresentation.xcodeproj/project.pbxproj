@@ -13,6 +13,8 @@
 		884200921D8C71BA00A477DA /* ReinforcerPostreinforcementTest.json in Resources */ = {isa = PBXBuildFile; fileRef = 8842008F1D8C71BA00A477DA /* ReinforcerPostreinforcementTest.json */; };
 		884200931D8C71BA00A477DA /* BehaviorPostreinforcementTest.json in Resources */ = {isa = PBXBuildFile; fileRef = 884200901D8C71BA00A477DA /* BehaviorPostreinforcementTest.json */; };
 		884200941D8C71BA00A477DA /* RandomUserPostreinforcementTest.json in Resources */ = {isa = PBXBuildFile; fileRef = 884200911D8C71BA00A477DA /* RandomUserPostreinforcementTest.json */; };
+		8842009B1D8EC75500A477DA /* MAXBlockButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 884200981D8EC75500A477DA /* MAXBlockButton.m */; };
+		8842009C1D8EC75500A477DA /* MAXFadeBlockButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 8842009A1D8EC75500A477DA /* MAXFadeBlockButton.m */; };
 		8849A4F01C8BB534004567F4 /* MNFJsonAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F711C8B84F000DFEBAD /* MNFJsonAdapter.m */; };
 		8849A4F11C8BB53B004567F4 /* NSObject+MenigaRuntimeExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F741C8B84F000DFEBAD /* NSObject+MenigaRuntimeExtension.m */; };
 		8849A4F21C8BB53E004567F4 /* NSString+MNFExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DB6F761C8B84F000DFEBAD /* NSString+MNFExtension.m */; };
@@ -118,6 +120,10 @@
 		8842008F1D8C71BA00A477DA /* ReinforcerPostreinforcementTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ReinforcerPostreinforcementTest.json; sourceTree = "<group>"; };
 		884200901D8C71BA00A477DA /* BehaviorPostreinforcementTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = BehaviorPostreinforcementTest.json; sourceTree = "<group>"; };
 		884200911D8C71BA00A477DA /* RandomUserPostreinforcementTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RandomUserPostreinforcementTest.json; sourceTree = "<group>"; };
+		884200971D8EC75500A477DA /* MAXBlockButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAXBlockButton.h; sourceTree = "<group>"; };
+		884200981D8EC75500A477DA /* MAXBlockButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAXBlockButton.m; sourceTree = "<group>"; };
+		884200991D8EC75500A477DA /* MAXFadeBlockButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAXFadeBlockButton.h; sourceTree = "<group>"; };
+		8842009A1D8EC75500A477DA /* MAXFadeBlockButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAXFadeBlockButton.m; sourceTree = "<group>"; };
 		8849A4F31C8BFAD9004567F4 /* ReinforcerTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ReinforcerTest.json; sourceTree = "<group>"; };
 		8849A4F51C8BFBE2004567F4 /* BehaviorTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = BehaviorTest.json; sourceTree = "<group>"; };
 		8849A4F71C8BFC07004567F4 /* RandomUserTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RandomUserTest.json; sourceTree = "<group>"; };
@@ -467,6 +473,10 @@
 		88DF19EA1B97E6DF009B076B /* Libraries, Categories and Reusable Components */ = {
 			isa = PBXGroup;
 			children = (
+				884200971D8EC75500A477DA /* MAXBlockButton.h */,
+				884200981D8EC75500A477DA /* MAXBlockButton.m */,
+				884200991D8EC75500A477DA /* MAXFadeBlockButton.h */,
+				8842009A1D8EC75500A477DA /* MAXFadeBlockButton.m */,
 				4EFE87541D7F273200AF61BB /* Line Chart View */,
 				4EFE874D1D7F244F00AF61BB /* Paging scroll view */,
 				88FFA9FE1B9E20160076E04A /* JawBone */,
@@ -778,7 +788,9 @@
 				88FFAA051B9E20250076E04A /* JBBarChartView.m in Sources */,
 				88DF1A001B97E725009B076B /* MBProgressHUD.m in Sources */,
 				88DF19AC1B97E2A5009B076B /* MainViewController.m in Sources */,
+				8842009C1D8EC75500A477DA /* MAXFadeBlockButton.m in Sources */,
 				88DF19A91B97E2A5009B076B /* AppDelegate.m in Sources */,
+				8842009B1D8EC75500A477DA /* MAXBlockButton.m in Sources */,
 				88DF19A61B97E2A5009B076B /* main.m in Sources */,
 				88FFA9FD1B9E1FC60076E04A /* UserDetailViewController.m in Sources */,
 				88729A341B9E3B670014507E /* Behavior.m in Sources */,

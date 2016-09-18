@@ -37,6 +37,7 @@ const int maxTimePlayed = 610;
     
     if (self = [super init]) {
         
+        _isChartOverview = YES;
         _randomUser = theRandomUser;
         _behaviorArray = [NSMutableArray array];
         _behaviorChartData = [NSMutableArray array];
@@ -461,10 +462,18 @@ const int maxTimePlayed = 610;
 -(NSUInteger)numberOfVerticalValuesAtIndes:(NSUInteger)lineIndex {
     NSLog(@"chart data count: %d", (int)_behaviorChartData.count);
 
-    return _behaviorChartData.count;
+    if (_isChartOverview == NO) {
+        return _behaviorChartData.count;
+    }
+    
+    return 600;
 }
 
 -(CGFloat)highestYValue {
+    
+    if (_isChartOverview == NO) {
+        return _behaviorArray.count;
+    }
     
     return 1200;
 }
