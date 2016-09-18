@@ -168,6 +168,36 @@
         }
         
     }
+    else if(theRow == 4) {
+        
+        if (theCol == 0) {
+            return @"Avg postreinforcement pause";
+        }
+        else {
+            return @"Std postreinforcement pause";
+        }
+        
+    }
+    else if(theRow == 5) {
+        
+        if (theCol == 0) {
+            return @"Avg min postreinforcement pause";
+        }
+        else {
+            return @"Std min postreinforcement pause";
+        }
+        
+    }
+    else if(theRow == 6) {
+        
+        if (theCol == 0) {
+            return @"Avg max postreinforcement pause";
+        }
+        else {
+            return @"Std max postreinforcement pause";
+        }
+        
+    }
     
     return @"";
 }
@@ -217,6 +247,36 @@
         }
         
     }
+    else if(theRow == 4) {
+        
+        if (theCol == 0) {
+            return [self avgPostreinforcementPause];
+        }
+        else {
+            return [self stdDevPostreinforcementPause];
+        }
+        
+    }
+    else if(theRow == 5) {
+        
+        if (theCol == 0) {
+            return [self avgMinPostreinforcementPause];
+        }
+        else {
+            return [self stdDevMinPostreinforcementPause];
+        }
+        
+    }
+    else if(theRow == 6) {
+        
+        if (theCol == 0) {
+            return [self avgMaxPostreinforcementPause];
+        }
+        else {
+            return [self stdDevMaxPostreinforcementPause];
+        }
+        
+    }
     
     return @"";
 }
@@ -242,7 +302,35 @@
     return [NSString stringWithFormat:@"%.04f", [_dataMan stdDevReinforcerForUsers: _randomUsers] * 30.0];
 }
 
+-(NSString *)avgPostreinforcementPause {
+    
+    return [NSString stringWithFormat:@"%.02f", [_dataMan avgPostreinforcementTimeForUsers: _randomUsers]];
+}
 
+-(NSString *)stdDevPostreinforcementPause {
+    
+    return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevPostreinforcementTimeForUsers: _randomUsers]];
+}
+
+-(NSString *)avgMinPostreinforcementPause {
+    
+    return [NSString stringWithFormat:@"%.02f", [_dataMan avgMinPostreinforcementTimeForUsers: _randomUsers]];
+}
+
+-(NSString *)stdDevMinPostreinforcementPause {
+    
+    return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevMinPostreinforcemenTimeForUsers: _randomUsers]];
+}
+
+-(NSString *)avgMaxPostreinforcementPause {
+    
+    return [NSString stringWithFormat:@"%.02f", [_dataMan avgMaxPostreinforcementTimeForUsers: _randomUsers]];
+}
+
+-(NSString *)stdDevMaxPostreinforcementPause {
+    
+    return [NSString stringWithFormat:@"%.02f", [_dataMan stdDevMaxPostreinforcementTimeForUsers: _randomUsers]];
+}
 
 -(NSArray*)reinforcerForUser:(RandomUser*)theRandomUser chartData:(NSArray*)theChartData {
     
@@ -330,8 +418,13 @@
     return 1100;
 }
 
+-(CGFloat)maxXValue {
+    
+    return 600;
+}
+
 -(NSString*)maxXValueString {
-    return [NSString stringWithFormat:@"%d", 610];
+    return [NSString stringWithFormat:@"%d", 600];
 }
 
 -(NSString*)maxYValueString {

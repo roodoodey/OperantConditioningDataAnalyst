@@ -357,6 +357,7 @@
     dotView.backgroundColor = [UIColor blackColor];
     [container addSubview: dotView];
     
+    
     UILabel *indexValueLabel = [[UILabel alloc] initWithFrame: CGRectMake(0, 0, CGRectGetWidth(container.frame) - (CGRectGetWidth(container.frame) - CGRectGetMinX(dotView.frame)), CGRectGetHeight(container.frame))];
     indexValueLabel.textAlignment = NSTextAlignmentCenter;
     indexValueLabel.textColor = [UIColor flatBlackColor];

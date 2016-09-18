@@ -31,6 +31,7 @@
 #pragma mark - Chart Data
 
 -(CGFloat)maxYValue;
+-(CGFloat)maxXValue;
 -(NSString*)maxXValueString;
 -(NSString*)maxYValueString;
 

@@ -204,6 +204,11 @@
     return [_viewModel maxYValue];
 }
 
+-(double)MAXHighestXValueForLineChart:(MAXLineChartView *)theLineChart {
+    
+    return [_viewModel maxXValue];
+}
+
 -(CGFloat)MAXLineChart:(MAXLineChartView *)TheLineChart widthForLine:(NSUInteger)theLine {
     
     return 2.0;
@@ -229,14 +234,74 @@
     return 3.0;
 }
 
+#pragma mark - Left Border Decoration Views
+
 -(NSUInteger)MAXLineChartNumberOfDecorationViewsForLeftBorder:(MAXLineChartView *)theLineChart {
     
     return 5;
 }
 
+-(double)MAXLineChart:(MAXLineChartView *)theChartView yValueForLeftBorderDecorationViewAtIndex:(NSUInteger)theIndex {
+    
+    double highestValue = [self MAXhighestYValueForLineChart: theChartView];
+    
+    return theIndex * highestValue / ([self MAXLineChartNumberOfDecorationViewsForLeftBorder: theChartView] - 1);
+}
+
+-(UIView *)MAXLineChart:(MAXLineChartView *)theChartView leftBorderDecorationViewAxisCenterPoint:(CGPoint)theCenterPoint atIndex:(NSUInteger)theIndex {
+    
+    UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(theCenterPoint.x - 1.5 - [self MAXLineChartLeftMarginWidth: theChartView], theCenterPoint.y - 10, [self MAXLineChartLeftMarginWidth: theChartView] + [self MAXLineChartLeftBorderWidthForChart: theChartView],  20)];
+    
+    UIView *dotView = [[UIView alloc] initWithFrame: CGRectMake(CGRectGetWidth(containerView.frame) - 10, CGRectGetHeight(containerView.frame) / 2.0 - 0.5, 10, 1)];
+    dotView.backgroundColor = [UIColor flatBlackColor];
+    [containerView addSubview: dotView];
+    
+    
+    UILabel * indexValueLabel = [[UILabel alloc] initWithFrame: CGRectMake(0, 0, CGRectGetWidth(containerView.frame) - (CGRectGetWidth(containerView.frame) - CGRectGetMinX(dotView.frame)), CGRectGetHeight(containerView.frame))];
+    indexValueLabel.textAlignment = NSTextAlignmentCenter;
+    indexValueLabel.textColor = [UIColor flatBlackColor];
+    indexValueLabel.font = [UIFont helveticaNeueBoldWithSize: 12.0];
+    indexValueLabel.text = [NSString stringWithFormat:@"%.0f", [self MAXLineChart: theChartView yValueForLeftBorderDecorationViewAtIndex: theIndex]];
+    indexValueLabel.adjustsFontSizeToFitWidth = YES;
+    indexValueLabel.minimumScaleFactor = 0.7;
+    [containerView addSubview: indexValueLabel];
+    
+    return containerView;
+}
+
+#pragma mark - Right Border Decoration Views
+
 -(NSUInteger)MAXLineChartNumberOfDecorationViewsForLowerBorder:(MAXLineChartView *)theLineChart {
     
     return 5;
+}
+
+-(double)MAXLineChart:(MAXLineChartView *)theChartView xValueForLowerBorderDecorationViewAtIndex:(NSUInteger)theIndex {
+    
+    double highestXValue = [self MAXHighestXValueForLineChart: theChartView];
+    
+    return theIndex * highestXValue / ([self MAXLineChartNumberOfDecorationViewsForLowerBorder: theChartView] - 1);
+}
+
+-(UIView *)MAXLineChart:(MAXLineChartView *)theChartView lowerBorderDecorationViewAxisCenterPoint:(CGPoint)theCenterPoint atIndex:(NSUInteger)theIndex {
+    
+    UIView *containerView = [[UIView alloc] initWithFrame: CGRectMake(theCenterPoint.x - 20, theCenterPoint.y - 1.5, 40, [self MAXLineChartLowerMarginHeight: theChartView] + [self MAXLineChartLowerBorderHeightForChart: theChartView])];
+    
+    
+    UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(containerView.frame) / 2.0 - 0.5, 0, 1, 10)];
+    dotView.backgroundColor = [UIColor flatBlackColor];
+    [containerView addSubview: dotView];
+    
+    UILabel *indexValueLabel = [[UILabel alloc] initWithFrame: CGRectMake(0, CGRectGetMaxY(dotView.frame), CGRectGetWidth(containerView.frame), CGRectGetHeight(containerView.frame) - CGRectGetMaxY(dotView.frame))];
+    indexValueLabel.textAlignment = NSTextAlignmentCenter;
+    indexValueLabel.textColor = [UIColor flatBlackColor];
+    indexValueLabel.font = [UIFont helveticaNeueBoldWithSize: 12.0];
+    indexValueLabel.text = [NSString stringWithFormat:@"%.0f", [self MAXLineChart: theChartView xValueForLowerBorderDecorationViewAtIndex:theIndex] ];
+    indexValueLabel.adjustsFontSizeToFitWidth = YES;
+    indexValueLabel.minimumScaleFactor = 0.7;
+    [containerView addSubview: indexValueLabel];
+    
+    return containerView;
 }
 
 #pragma mark - Decoration views for lines
@@ -300,6 +365,8 @@
     return [_viewModel colorForLineAtIndex:lineIndex];
 }
 
+
+
 #pragma mark - Block view Delegate & Datasource
 
 -(void)blocksView:(MAXBlockView *)theBlockView block:(UIView *)theBlock forRow:(NSUInteger)theRow forCol:(NSUInteger)theCol {
@@ -308,7 +375,7 @@
 }
 
 -(NSInteger)numRowsInBlockView:(MAXBlockView *)theBlockView {
-    return 4;
+    return 7;
 }
 
 -(NSInteger)numColumnsInBlockView:(MAXBlockView *)theBlockView inRow:(NSUInteger)theRow {
