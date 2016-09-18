@@ -344,7 +344,7 @@
 
 -(double)MAXHighestXValueForLineChart:(MAXLineChartView *)theLineChart {
     
-    return [_viewModel numberOfVerticalValuesAtIndes: 0];
+    return [_viewModel numberOfVerticalValuesAtIndes: 0] - 1;
 }
 
 -(CGFloat)MAXLineChartLeftBorderWidthForChart:(MAXLineChartView *)theLineChart {

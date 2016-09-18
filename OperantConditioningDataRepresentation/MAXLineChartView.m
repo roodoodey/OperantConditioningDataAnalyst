@@ -379,8 +379,15 @@
             
             double highestYValueForChart = [self p_highestYValueForChart];
             
-            double lowPosY = [[lineData objectAtIndex: lowPosX] doubleValue] / highestYValueForChart;
-            double highPosY = [[lineData objectAtIndex: highPosX] doubleValue] / highestYValueForChart;
+            double lowPosY = highestYValueForChart;
+            if (lineData.count > lowPosX) {
+                lowPosY = [[lineData objectAtIndex: lowPosX] doubleValue] / highestYValueForChart;
+            }
+            
+            double highPosY = highestYValueForChart;
+            if (lineData.count > highPosX) {
+                highPosY = [[lineData objectAtIndex: highPosX] doubleValue] / highestYValueForChart;
+            }
             
             double slopeHeight = /* dstance x*/ (posX - lowPosX) * /* slope */ (highPosY - lowPosY) * [self p_chartHeight];
             double lowPosYViewCoord = (1 - lowPosY) * [self p_chartHeight];

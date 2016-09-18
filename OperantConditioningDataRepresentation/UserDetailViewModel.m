@@ -460,13 +460,13 @@ const int maxTimePlayed = 610;
 }
 
 -(NSUInteger)numberOfVerticalValuesAtIndes:(NSUInteger)lineIndex {
-    NSLog(@"chart data count: %d", (int)_behaviorChartData.count);
+    
 
     if (_isChartOverview == NO) {
         return _behaviorChartData.count;
     }
     
-    return 600;
+    return 601;
 }
 
 -(CGFloat)highestYValue {
